@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administrator Dashboard</title>
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        background-color: #d96c53;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #000;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+      }
+
+      .container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+      }
+
+      .sidebar {
+        width: 25%;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        border-radius: 5px;
+      }
+
+      .sidebar h2 {
+        text-align: center;
+        font-size: 24px;
+      }
+
+      .search-bar input,
+      .search-bar button {
+        padding: 10px;
+        margin: 5px 0;
+        width: 97%;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+
+      .search-bar button {
+        background-color: #a6533e;
+        color: white;
+        cursor: pointer;
+      }
+
+      .search-bar button:hover {
+        background-color: #434190;
+      }
+
+      .user-list,
+      .post-list {
+        margin-top: 20px;
+      }
+
+      .user-item {
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        background-color: #fff;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .user-item img {
+        width: 70px;
+        height: 50px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+      }
+
+      .user-item button {
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%;
+        margin-top: 5px;
+      }
+
+      .enable {
+        background-color: #48bb78;
+        color: white;
+      }
+
+      .disable,
+      .remove {
+        background-color: #e53e3e;
+        color: white;
+      }
+
+      .main-content {
+        width: 950px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .post-item {
+        background-color: #fff;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .post-images {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .post-images img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        object-fit: cover;
+      }
+
+      .remove-post {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #e53e3e;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .remove-post:hover {
+        background-color: #c53030;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Admin Dashboard</h1>
+    </header>
+    <div class="container">
+      <div class="sidebar">
+        <h2>User Management</h2>
+        <div class="search-bar">
+          <input
+            type="text"
+            placeholder="Search by Name, Email, or Post"
+            id="user-search-input"
+          />
+          <button onclick="searchUser()">Search</button>
+        </div>
+        <div class="user-list">
+          <div class="user-item">
+            <img src="source/profile.jpeg" alt="John Doe" />
+            <div>
+              <p><strong>John Doe</strong></p>
+              <p>Email: john.doe@example.com</p>
+            </div>
+            <button class="enable" onclick="toggleUserStatus('John Doe')">
+              Enable
+            </button>
+            <button class="remove" onclick="removeUser('John Doe')">
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="main-content">
+        <h2>Post Management</h2>
+        <div class="search-bar">
+          <input
+            type="text"
+            placeholder="Search Posts"
+            id="post-search-input"
+          />
+          <button onclick="searchPost()">Search</button>
+        </div>
+        <div class="post-list">
+          <div class="post-item">
+            <h3>Post Title #1</h3>
+            <p>Post content preview...</p>
+            <p>by John Doe</p>
+            <div class="post-images">
+              <img src="source/pic1.png" alt="Product Image 1" />
+              <img src="source/pic1.png" alt="Product Image 2" />
+              <img src="source/pic1.png" alt="Product Image 3" />
+            </div>
+            <button class="remove-post" onclick="removePost('Post Title #1')">
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

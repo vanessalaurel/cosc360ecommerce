@@ -1,0 +1,250 @@
+body {
+  background-color: #d96c53;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #000;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.top-bar {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 5px 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #222;
+  color: white;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: white;
+}
+
+.search-bar input {
+  padding: 5px;
+}
+
+button {
+  background-color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px;
+  width: 1100px;
+  color: white;
+  margin-left: 100px;
+}
+
+.categories,
+.best-sellers {
+  text-align: left;
+  padding: 20px;
+  color: white;
+  margin-top: 80px;
+}
+
+.category-list {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 55px;
+}
+
+.category {
+  padding: 10px 20px;
+  background-color: none;
+  color: #000;
+  cursor: pointer;
+  border-radius: 2px;
+  width: 150px;
+  height: 145px;
+  border: 0.5px solid #000;
+  text-align: center;
+}
+
+.category i {
+  font-size: 36px; /* Adjust the size of the icons */
+  margin-bottom: 10px; /* Space between icon and text */
+}
+
+.active {
+  background-color: #a6533e;
+  color: white;
+  border: none;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+.product-title {
+  font-size: 16px;
+  font-style: normal;
+  color: #000;
+}
+.product-card {
+  width: 270px;
+  height: 350px;
+  overflow: hidden;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.product-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.product-price {
+  font-size: 14px;
+  color: #333;
+  margin-top: 5px;
+}
+.product-old-price {
+  font-size: 14px;
+  color: #d8d2d2; /* Light gray color */
+  text-decoration: line-through; /* This will strike through the old price */
+  margin-left: 10px; /* Optional: add space between the new price and the old price */
+}
+
+.product-rating {
+  color: #ffd700;
+  font-size: 14px;
+  margin-top: 5px;
+}
+.product-image {
+  position: relative;
+  width: 270px;
+  height: 250px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.product-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.add-to-cart {
+  position: absolute;
+  top: 213px; /* Place it on the top of the image */
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%); /* Center the text horizontally */
+  background-color: #000; /* Semi-transparent background */
+  color: white;
+  padding: 10px 20px;
+
+  display: none; /* Initially hidden */
+  font-size: 14px;
+  text-align: center;
+}
+
+.product-image:hover .add-to-cart {
+  display: block; /* Show the "Add to Cart" text on hover */
+}
+
+footer {
+  color: white;
+  background-color: black;
+  padding: 50px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+footer h3 {
+  margin-bottom: 10px;
+}
+
+footer p {
+  margin: 5px 0;
+}
+
+input[type="email"] {
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  width: 180px;
+}
+
+.social-icons span {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background-color: #d96c53;
+}
+
+.logo {
+  padding-top: 20px;
+}
+
+nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+
+nav .active {
+  text-decoration: underline;
+}
+
+.search-cart input {
+  padding: 10px;
+  border-radius: 4px;
+  border: none;
+  width: 200px;
+}
+
+.search-cart button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
