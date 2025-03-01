@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artzy - Detalls del Producte</title>
+    <link rel="stylesheet" href="productDetails.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const minusBtn = document.querySelector(
+            ".quantity-container button:first-child"
+          );
+          const plusBtn = document.querySelector(
+            ".quantity-container button:last-child"
+          );
+          const quantityInput = document.querySelector(
+            ".quantity-container input"
+          );
+  
+          minusBtn.addEventListener("click", function () {
+            let value = parseInt(quantityInput.value);
+            if (value > 1) {
+              quantityInput.value = value - 1;
+            }
+          });
+  
+          plusBtn.addEventListener("click", function () {
+            let value = parseInt(quantityInput.value);
+            if (value < 9999) {
+              quantityInput.value = value + 1;
+            }
+          });
+  
+          const uploadBox = document.querySelector(".upload-box");
+          const fileInput = document.createElement("input");
+          fileInput.type = "file";
+          fileInput.accept = "image/*";
+          uploadBox.appendChild(fileInput);
+        });
+      </script>
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="Exclusive.png" alt="Logo"></div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Contact</a>
+            <a href="#">About</a>
+            <a href="#">Sign Up</a>
+            <a href="#">Sell</a>
+
+        </nav>
+        <div class="search-cart">
+            <input type="text" placeholder="What are you looking for?">
+            <button><img src="Vector.png" alt=""></button>
+            <button><img src="Frame 551.png" style="position: relative; top: 7px;"></button>
+            <button><img src="user.png" style="position: relative; top: 7px;"></button>
+        </div>
+    </header>
+
+    <main class="firstLine">
+        <div>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">Pottery</a>
+                <a href="#">Pottery Real Handmade 01</a>
+            </nav>
+        </div>
+        <div class="sell">
+            Sell
+        </div>
+    </main>
+
+    <div class="container">
+        <div class="column small-images">
+            <img src="qr.jpeg" alt="Image 1">
+            <img src="qr.jpeg" alt="Image 2">
+            <img src="qr.jpeg" alt="Image 3">
+            <img src="qr.jpeg" alt="Image 4">
+            <img src="qr.jpeg" alt="Image 5">
+        </div>
+        <div class="column large-image">
+            <img src="fang.jpeg" alt="Large Image">
+        </div>
+        <div class="column text-content">
+            <h2>Pottery real Handmade 01</h2>
+            <p style="font-size: 24px;">$192.00</p>
+            <p>This is the text content. You can add more paragraphs, descriptions, or any other information here. This is the text content. You can add more paragraphs, descriptions, or any other information here.</p>
+            <hr>
+            <div class="bottom-section">
+                <div class="quantity-container">
+                  <button>-</button>
+                  <input type="number" value="1" min="1" max="9999" />
+                  <button>+</button>
+                </div>
+                <button class="btn">Buy Now</button>
+              </div>
+              <div>
+                <img src="Frame.png" alt="">
+              </div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <div class="columna columna-esquerra">
+            <div class="review-form">
+                <h2>Post Your Review</h2>
+                <div style="display: flex; gap: 20px;">
+                    <div class="upload-box">+<input type="file" accept="image/*"/></div>
+                    <input type="text" class="textReview" placeholder="Writte Review">
+                </div>
+                <button>Send Review</button>
+            </div>
+        </div>
+
+        <div class="columna columna-dreta">
+            <div class="producte">
+                <img src="qr.jpeg" alt="Imatge del producte">
+                <h3>Product Name</h3>
+                <p class="preu"><u>19.99€</u></p>
+            </div>
+            <div class="producte">
+                <img src="qr.jpeg" alt="Imatge del producte">
+                <h3>Product Name</h3>
+                <p class="preu"><u>19.99€</u></p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="reviews">
+        <h2 style="padding-left: 20px;">Reviews</h2>
+        <div class="user">
+            <img src="qr.jpeg" alt="Foto de perfil">
+            <div class="description">
+                <h4>User 01</h4>
+                <p>Really good product, it's very usefull.</p>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <footer>
+        <div class="footer-content">
+            <div class="exclusive">
+                <h3>Exclusive</h3>
+                <p>Subscribe</p>
+                <p>Get 10% off your first order</p>
+                <input type="email" placeholder="Enter your email">
+            </div>
+            <div class="support">
+                <h3>Support</h3>
+                <p>111 Bijoy Sarani, Dhaka, DH 1515, Bangladesh.</p>
+                <p>exclusive@gmail.com</p>
+                <p>+88015-88888-9999</p>
+            </div>
+            <div class="account">
+                <h3>Account</h3>
+                <p>My Account</p>
+                <p>Login / Register</p>
+                <p>Cart</p>
+                <p>Wishlist</p>
+                <p>Shop</p>
+            </div>
+            <div class="quick-links">
+                <h3>Quick Link</h3>
+                <p>Privacy Policy</p>
+                <p>Terms Of Use</p>
+                <p>FAQ</p>
+                <p>Contact</p>
+            </div>
+            <div class="download-app">
+                <h3>Download App</h3>
+                <p style="font-size: 12px;">Save $3 with App New User Only</p>
+                <div>
+                    <img src="Frame 719.png" alt="">
+                </div>
+                <div>
+                    <img src="Frame 741.png" alt="">
+                </div>
+            </div>
+        </div>
+        <p class="copyright">© Copyright Rimel 2022. All rights reserved</p>
+    </footer>
+</body>
+</html>
