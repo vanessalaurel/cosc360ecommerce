@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seller Profile</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #e06c54;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1300px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      .content-container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .products-section {
+        flex: 3;
+        display: flex;
+        flex-direction: column;
+      }
+      .feedback-section {
+        flex: 1;
+        background: #f8f8f8;
+        padding: 20px;
+        border-radius: 10px;
+        height: fit-content;
+        min-width: 300px;
+        color: #000;
+      }
+      .profile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .profile-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .profile-avatar {
+        width: 60px;
+        height: 60px;
+        background-color: #777;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+      }
+      .stats {
+        display: flex;
+        gap: 30px;
+        margin-top: 20px;
+      }
+      .stat-box {
+        background: #f8f8f8;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        flex: 1;
+      }
+      .dropdown {
+        margin-top: 40px;
+      }
+      .dropdown select {
+        width: 20%;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .products {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 20px;
+      }
+      .product-card {
+        background: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: left;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 230px;
+        height: 330px;
+      }
+      .product-image {
+        position: relative;
+        width: 230px;
+        height: 200px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .product-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+      .product-price {
+        font-size: 14px;
+        color: #333;
+        margin-top: 5px;
+      }
+      .product-rating {
+        color: #ffd700;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+      .best-sellers {
+        text-align: left;
+        padding: 20px;
+        color: white;
+        margin-top: 80px;
+      }
+      .categories,
+      .best-sellers {
+        text-align: left;
+        padding: 20px;
+        color: white;
+        margin-top: 80px;
+      }
+
+      .category-list {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 55px;
+      }
+
+      .category {
+        padding: 10px 20px;
+        background-color: none;
+        color: #000;
+        cursor: pointer;
+        border-radius: 2px;
+        width: 150px;
+        height: 145px;
+        border: 0.5px solid #000;
+        text-align: center;
+      }
+
+      .category i {
+        font-size: 24px; /* Adjust the size of the icons */
+        margin-bottom: 10px; /* Space between icon and text */
+      }
+
+      .active {
+        background-color: #a6533e;
+        color: white;
+        border: none;
+      }
+
+      .products {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .product-title {
+        font-size: 16px;
+        font-style: normal;
+        color: #000;
+      }
+      .product-card {
+        width: 270px;
+        height: 350px;
+        overflow: hidden;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: left;
+      }
+
+      .product-name {
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      .product-price {
+        font-size: 14px;
+        color: #333;
+        margin-top: 5px;
+      }
+
+      .product-rating {
+        color: #ffd700;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+      .product-image {
+        position: relative;
+        width: 270px;
+        height: 250px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .product-image-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        gap: 30px;
+      }
+      .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      .pagination button {
+        border: none;
+        background: #f8f8f8;
+        padding: 10px 15px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .pagination button.active {
+        background: #e06c54;
+        color: white;
+      }
+      .page-numbers {
+        display: flex;
+        gap: 5px;
+      }
+    </style>
+    <script>
+      let currentPage = 1;
+      const productsPerPage = 6;
+      function showPage(page) {
+        const products = document.querySelectorAll(".product-card");
+        products.forEach((product, index) => {
+          product.style.display =
+            index >= (page - 1) * productsPerPage &&
+            index < page * productsPerPage
+              ? "block"
+              : "none";
+        });
+        currentPage = page;
+        updatePageNumbers();
+      }
+      function nextPage() {
+        const totalPages = Math.ceil(
+          document.querySelectorAll(".product-card").length / productsPerPage
+        );
+        if (currentPage < totalPages) showPage(currentPage + 1);
+      }
+      function prevPage() {
+        if (currentPage > 1) showPage(currentPage - 1);
+      }
+      function updatePageNumbers() {
+        const totalPages = Math.ceil(
+          document.querySelectorAll(".product-card").length / productsPerPage
+        );
+        const pageNumbersContainer = document.getElementById("page-numbers");
+        pageNumbersContainer.innerHTML = "";
+
+        let pages = [];
+        if (totalPages <= 5) {
+          for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+          pages.push(1);
+          if (currentPage > 3) pages.push("...");
+          for (
+            let i = Math.max(2, currentPage - 1);
+            i <= Math.min(totalPages - 1, currentPage + 1);
+            i++
+          ) {
+            pages.push(i);
+          }
+          if (currentPage < totalPages - 2) pages.push("...");
+          pages.push(totalPages);
+        }
+
+        pages.forEach((page) => {
+          let pageElement = document.createElement("button");
+          pageElement.innerText = page;
+          if (page === "...") {
+            pageElement.disabled = true;
+          } else {
+            pageElement.className = currentPage === page ? "active" : "";
+            pageElement.onclick = () => showPage(page);
+          }
+          pageNumbersContainer.appendChild(pageElement);
+        });
+      }
+      window.onload = function () {
+        showPage(1);
+      };
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="profile-header">
+        <div class="profile-info">
+          <div class="profile-avatar">J</div>
+          <div>
+            <h2>John</h2>
+          </div>
+        </div>
+        <button style="width: 120px; height: 45px; border-radius: 10px">
+          Contact Seller
+        </button>
+      </div>
+      <div class="stats">
+        <div class="stat-box">
+          <h3>Total Products</h3>
+          <p id="total-products">8</p>
+        </div>
+        <div class="stat-box">
+          <h3>Positive Feedback</h3>
+          <p id="positive-feedback">65</p>
+        </div>
+        <div class="stat-box">
+          <h3>Negative Feedback</h3>
+          <p id="negative-feedback">0</p>
+        </div>
+      </div>
+      <div class="dropdown">
+        <select id="category">
+          <option>Clothing</option>
+          <option>Jewelry</option>
+          <option>Toys</option>
+          <option>Home Decoration</option>
+          <option>Kitchenware</option>
+          <option>Furniture</option>
+        </select>
+      </div>
+      <div class="content-container">
+        <section class="best-sellers">
+          <div style="display: flex">
+            <h2 style="font-size: 36px; color: black; margin-left: 30px">
+              Products
+            </h2>
+          </div>
+          <div class="products-section">
+            <div class="products">
+              <div class="product-card">
+                <div class="product-image">
+                  <img
+                    src="productEcomm.png"
+                    alt="Handmade Soap"
+                    class="product-image-img"
+                  />
+                  <div class="add-to-cart">Add to Cart</div>
+                </div>
+
+                <div class="product-info">
+                  <h3 class="product-title">Handmade Soap</h3>
+                  <p class="product-price">
+                    $260 <span class="product-old-price">$360</span>
+                  </p>
+                  <p class="product-rating">★★★★★ (65)</p>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="product-image">
+                  <img
+                    src="productEcomm.png"
+                    alt="Handmade Soap"
+                    class="product-image-img"
+                  />
+                  <div class="add-to-cart">Add to Cart</div>
+                </div>
+                <div class="product-info">
+                  <h3 class="product-title">Handmade Soap</h3>
+                  <p class="product-price">
+                    $960 <span class="product-old-price">$1160</span>
+                  </p>
+                  <p class="product-rating">★★★★★ (65)</p>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="product-image">
+                  <img
+                    src="productEcomm.png"
+                    alt="Handmade Soap"
+                    class="product-image-img"
+                  />
+                  <div class="add-to-cart">Add to Cart</div>
+                </div>
+                <div class="product-info">
+                  <h3 class="product-title">Handmade Soap</h3>
+                  <p class="product-price">
+                    $160 <span class="product-old-price">$170</span>
+                  </p>
+                  <p class="product-rating">★★★★☆ (65)</p>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="product-image">
+                  <img
+                    src="productEcomm.png"
+                    alt="Handmade Soap"
+                    class="product-image-img"
+                  />
+                  <div class="add-to-cart">Add to Cart</div>
+                </div>
+                <div class="product-info">
+                  <h3 class="product-title">Handmade Soap</h3>
+                  <p class="product-price">$360</p>
+                  <p class="product-rating">★★★★★ (65)</p>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="product-image">
+                  <img
+                    src="productEcomm.png"
+                    alt="Handmade Soap"
+                    class="product-image-img"
+                  />
+                  <div class="add-to-cart">Add to Cart</div>
+                </div>
+                <div class="product-info">
+                  <h3 class="product-title">Handmade Soap</h3>
+                  <p class="product-price">$360</p>
+                  <p class="product-rating">★★★★★ (65)</p>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="product-image">
+                  <img
+                    src="productEcomm.png"
+                    alt="Handmade Soap"
+                    class="product-image-img"
+                  />
+                  <div class="add-to-cart">Add to Cart</div>
+                </div>
+                <div class="product-info">
+                  <h3 class="product-title">Handmade Soap</h3>
+                  <p class="product-price">$360</p>
+                  <p class="product-rating">★★★★★ (65)</p>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="product-image">
+                  <img
+                    src="productEcomm.png"
+                    alt="Handmade Soap"
+                    class="product-image-img"
+                  />
+                  <div class="add-to-cart">Add to Cart</div>
+                </div>
+                <div class="product-info">
+                  <h3 class="product-title">Handmade Soap</h3>
+                  <p class="product-price">$360</p>
+                  <p class="product-rating">★★★★★ (65)</p>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="product-image">
+                  <img
+                    src="productEcomm.png"
+                    alt="Handmade Soap"
+                    class="product-image-img"
+                  />
+                  <div class="add-to-cart">Add to Cart</div>
+                </div>
+                <div class="product-info">
+                  <h3 class="product-title">Handmade Soap</h3>
+                  <p class="product-price">$360</p>
+                  <p class="product-rating">★★★★★ (65)</p>
+                </div>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <div class="pagination">
+                <button onclick="prevPage()">&lt; Previous</button>
+                <div class="page-numbers">
+                  <span id="current-page">1</span>
+                </div>
+                <button onclick="nextPage()">Next &gt;</button>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-section">
+            <h3>Feedback</h3>
+            <p>No feedback yet.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
