@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Your Product</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #e06c54;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 40px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .title {
+        font-size: 40px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        padding-left: 40px;
+      }
+      .container {
+        display: flex;
+        background: #e06c54;
+        padding: 40px;
+        gap: 40px;
+        width: 80%;
+        max-width: 1200px;
+      }
+      .upload-box {
+        width: 400px;
+        height: 400px;
+        background: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 20px;
+        font-size: 24px;
+        position: relative;
+      }
+      .upload-box input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .form-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+      }
+      input,
+      select,
+      textarea {
+        padding: 15px;
+        width: 100%;
+        border-radius: 15px;
+        border: 1px solid #ccc;
+        font-size: 18px;
+      }
+      .bottom-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 20px;
+      }
+      .quantity-container {
+        display: flex;
+        align-items: center;
+        border: 2px solid #5a2d0c;
+        border-radius: 10px;
+        overflow: hidden;
+        font-size: 18px;
+      }
+      .quantity-container button {
+        background-color: #e06c54;
+        color: black;
+        border: none;
+        padding: 15px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.3s;
+      }
+      .quantity-container button:hover {
+        background-color: #3d1e0b;
+        color: white;
+      }
+      .quantity-container input {
+        width: 70px;
+        text-align: center;
+        border: none;
+        background: #e06c54;
+        color: black;
+        font-size: 18px;
+      }
+      .quantity-container button:first-child {
+        border-right: 2px solid #3d1e0b;
+      }
+      .quantity-container button:last-child {
+        border-left: 2px solid #3d1e0b;
+      }
+      .btn {
+        background-color: #5a2d0c;
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+        font-size: 18px;
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const minusBtn = document.querySelector(
+          ".quantity-container button:first-child"
+        );
+        const plusBtn = document.querySelector(
+          ".quantity-container button:last-child"
+        );
+        const quantityInput = document.querySelector(
+          ".quantity-container input"
+        );
+
+        minusBtn.addEventListener("click", function () {
+          let value = parseInt(quantityInput.value);
+          if (value > 1) {
+            quantityInput.value = value - 1;
+          }
+        });
+
+        plusBtn.addEventListener("click", function () {
+          let value = parseInt(quantityInput.value);
+          if (value < 9999) {
+            quantityInput.value = value + 1;
+          }
+        });
+
+        const uploadBox = document.querySelector(".upload-box");
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        uploadBox.appendChild(fileInput);
+      });
+    </script>
+  </head>
+  <body>
+    <div class="title">Upload Photos Of Your Arts</div>
+    <div class="container">
+      <div class="upload-box">+<input type="file" accept="image/*" /></div>
+      <div class="form-container">
+        <label style="font-size: 20px; font-weight: bold"
+          >Name of your product:</label
+        >
+        <input type="text" placeholder="Product Name" />
+
+        <label style="font-size: 20px; font-weight: bold">Price:</label>
+        <input type="number" placeholder="Price" min="1" max="999999" />
+
+        <label style="font-size: 20px; font-weight: bold">Description:</label>
+        <textarea placeholder="Product Description"></textarea>
+
+        <label style="font-size: 20px; font-weight: bold">Category:</label>
+        <select>
+          <option>Choose the category</option>
+          <option>Clothing</option>
+          <option>Jewelry</option>
+          <option>Toys</option>
+          <option>Home Decoration</option>
+          <option>Kitchenware</option>
+          <option>Furniture</option>
+        </select>
+
+        <div class="bottom-section">
+          <div class="quantity-container">
+            <button>-</button>
+            <input type="number" value="1" min="1" max="9999" />
+            <button>+</button>
+          </div>
+          <button class="btn">List Now</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
