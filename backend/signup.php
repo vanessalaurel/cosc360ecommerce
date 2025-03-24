@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 // Database connection (replace with your actual credentials)
 $servername = "localhost";
 $username = "root";
-$password = "";
+$password = "root";
 $dbname = "userInfo_db";
 
 // Create connection
@@ -55,7 +55,7 @@ if ($email && $password) {
         
         if ($stmt->execute()) {
             // Registration successful, redirect to logIn.html
-            header("Location: logIn.html");
+            header("Location: ../logIn.html");
             exit; // Ensure no further code is executed after redirection
         } else {
             echo "Error: " . $stmt->error;
