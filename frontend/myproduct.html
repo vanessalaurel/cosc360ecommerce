@@ -9,6 +9,84 @@
       src="https://kit.fontawesome.com/a076d05399.js"
       crossorigin="anonymous"
     ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetchUserProducts();
+      });
+
+      function fetchUserProducts() {
+        fetch("backend/getUserProduct.php")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              // Handle error (e.g., redirect to login)
+              window.location.href = "login.html";
+              return;
+            }
+
+            displayProducts(data.products);
+          })
+          .catch((error) => {
+            console.error("Error fetching products:", error);
+          });
+      }
+
+      function displayProducts(products) {
+        const productsContainer = document.getElementById("products-container");
+
+        // Clear existing content
+        productsContainer.innerHTML = "";
+
+        if (products.length === 0) {
+          // Show message if no products
+          productsContainer.innerHTML = `
+            <div style="width: 100%; text-align: center; padding: 40px;">
+              <p style="font-size: 18px;">You haven't listed any products yet.</p>
+              <a href="Listingpage.html" style="
+                display: inline-block;
+                margin-top: 20px;
+                background-color: #5a2d0c; 
+                color: white; 
+                padding: 15px 30px; 
+                border-radius: 10px; 
+                text-decoration: none;
+                font-weight: bold;
+              ">
+                List Your First Product
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        // Add products
+        products.forEach((product) => {
+          const productCard = document.createElement("div");
+          productCard.className = "product-card";
+
+          productCard.innerHTML = `
+            <div class="product-image">
+              <img
+                src="${product.image_path}"
+                alt="${product.product_name}"
+                class="product-image-img"
+              />
+              <div class="add-to-cart">Edit Product</div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">${product.product_name}</h3>
+              <p class="product-price">
+                $${parseFloat(product.price).toFixed(2)}
+              </p>
+              <p class="product-category">Category: ${product.category}</p>
+              <p class="product-quantity">Quantity: ${product.quantity}</p>
+            </div>
+          `;
+
+          productsContainer.appendChild(productCard);
+        });
+      }
+    </script>
   </head>
   <header>
     <div class="logo"><img src="Source/Exclusive.png" alt="Logo" /></div>
@@ -35,7 +113,20 @@
         <h2 style="font-size: 36px; color: black; margin-left: 40px">
           My Products
         </h2>
-        <div style="margin-top: 28px; margin-left: 850px">
+        <div style="margin-top: 28px; margin-left: auto; margin-right: 40px">
+          <a
+            href="Listingpage.html"
+            style="
+              background-color: #5a2d0c;
+              color: white;
+              padding: 10px 20px;
+              border-radius: 10px;
+              text-decoration: none;
+              font-weight: bold;
+            "
+          >
+            + Add New Product
+          </a>
           <button style="border-radius: 90px; width: 46px; height: 46px">
             <
           </button>
@@ -172,6 +263,13 @@
             <p class="product-price">$360</p>
             <p class="product-rating">★★★★★ (65)</p>
           </div>
+        </div>
+      </div>
+      <!-- This div will be filled with products by JavaScript -->
+      <div id="products-container" class="products">
+        <!-- Loading indicator -->
+        <div style="width: 100%; text-align: center; padding: 40px">
+          <p>Loading your products...</p>
         </div>
       </div>
     </section>
