@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 // Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405); // Send 405 error if not POST
@@ -23,15 +21,10 @@ if ($conn->connect_error) {
 }
 
 // Retrieve form data and sanitize inputs
-$username = isset( $_POST["username"]) ? trim($_POST["username"]) : null;
 $email = isset($_POST["email"]) ? trim($_POST["email"]) : null;
 $password = isset($_POST["password"]) ? trim($_POST["password"]) : null;
 
-// Add debugging
-echo "Debug - Username: " . $username . ", Email: " . $email . ", Password length: " . strlen($password) . "<br>";
-
 // Sanitize email and password to prevent XSS attacks
-$username = htmlspecialchars($username, ENT_QUOTES,"UTF-8");
 $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 $password = htmlspecialchars($password, ENT_QUOTES, 'UTF-8');
 
@@ -42,10 +35,10 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // Check if form data is received correctly
-if ($username && $email && $password) {
+if ($email && $password) {
     // Check if the email already exists in the database
-    $stmt = $conn->prepare("SELECT email, username FROM users WHERE email = ? OR username = ?");
-    $stmt->bind_param("ss", $email, $username);  // "s" denotes the string type
+    $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);  // "s" denotes the string type
     $stmt->execute();
     $stmt->store_result();
 
@@ -57,19 +50,11 @@ if ($username && $email && $password) {
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
         // Use prepared statement to insert new user data into the database
-        $stmt = $conn->prepare("INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)");
-        if ($stmt === false) {
-            echo "Error preparing statement: " . $conn->error;
-            exit;
-        }
-
-        $stmt->bind_param("sss", $username, $email, $password_hash); // "ss" denotes two string types
+        $stmt = $conn->prepare("INSERT INTO users (email, password_hash) VALUES (?, ?)");
+        $stmt->bind_param("ss", $email, $password_hash); // "ss" denotes two string types
         
         if ($stmt->execute()) {
-            //echo "Registration successful! You can now log in.";
-            echo "Registration successful! Redirecting to login page...";
-            header("Location: ../frontend/logIn.html");
-            exit();
+            echo "Registration successful! You can now log in.";
         } else {
             echo "Error: " . $stmt->error;
         }
