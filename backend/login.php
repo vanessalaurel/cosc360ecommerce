@@ -3,6 +3,12 @@
 // Start a session to manage user login state
 session_start();
 
+// If the user is already logged in, redirect them to myproduct.html
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    header("Location: ../myproduct.html");
+    exit;
+}
+
 // Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405); // Send 405 error if not POST
@@ -48,14 +54,12 @@ if ($email && $password) {
         // Verify password using password_hash() and password_verify() functions
         if (password_verify($password, $password_hash)) {
             
-            // Set session variables
+            // Set session variables to maintain login state
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $username;
             $_SESSION['email'] = $email;
-            $_SESSION['logged_in'] = true;
-            echo "<h2>Login Successful</h2>";
-            echo "Welcome, " . htmlspecialchars($email) . "!";
-            
+            $_SESSION['logged_in'] = true; // Explicit login state
+
             // Redirect to myproduct.html after successful login
             header("Location: ../myproduct.html");
             exit;
