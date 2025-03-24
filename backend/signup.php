@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 // Database connection (replace with your actual credentials)
 $servername = "localhost";
 $username = "root";
-$password = "root";
+$password = "";
 $dbname = "userInfo_db";
 
 // Create connection
@@ -21,12 +21,10 @@ if ($conn->connect_error) {
 }
 
 // Retrieve form data and sanitize inputs
-$username = isset($_POST["username"]) ? trim($_POST["username"]) : null;
 $email = isset($_POST["email"]) ? trim($_POST["email"]) : null;
 $password = isset($_POST["password"]) ? trim($_POST["password"]) : null;
 
 // Sanitize email and password to prevent XSS attacks
-$username = htmlspecialchars($username, ENT_QUOTES, "UTF-8");
 $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 $password = htmlspecialchars($password, ENT_QUOTES, 'UTF-8');
 
@@ -52,14 +50,13 @@ if ($email && $password) {
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
         // Use prepared statement to insert new user data into the database
-        $stmt = $conn->prepare("INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $username, $email, $password_hash); // "ss" denotes two string types
+        $stmt = $conn->prepare("INSERT INTO users (email, password_hash) VALUES (?, ?)");
+        $stmt->bind_param("ss", $email, $password_hash); // "ss" denotes two string types
         
         if ($stmt->execute()) {
-            echo "Registration successful! You can now log in.";
-            
-            // Redirect to logIn.html after successful login
-            header("Location: ../logIn.html");
+            // Registration successful, redirect to logIn.html
+            header("Location: logIn.html");
+            exit; // Ensure no further code is executed after redirection
         } else {
             echo "Error: " . $stmt->error;
         }
