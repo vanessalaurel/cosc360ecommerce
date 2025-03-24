@@ -106,12 +106,18 @@
     <div class="grid-container">
         <div class="columna columna-esquerra">
             <div class="review-form">
-                <h2>Post Your Review</h2>
-                <div style="display: flex; gap: 20px;">
-                    <div class="upload-box">+<input type="file" accept="image/*"/></div>
-                    <input type="text" class="textReview" placeholder="Writte Review">
-                </div>
-                <button>Send Review</button>
+                <form action="submit_review.php" method="POST" enctype="multipart/form-data" class="review-form">
+                    <h2>Post Your Review</h2>
+                    <div class="review-inputs">
+                        <label class="upload-box">
+                            <span>+</span>
+                            <input type="file" name="review_image" accept="image/*" hidden />
+                        </label>
+                        <input type="text" name="review_text" class="textReview" placeholder="Write your review" required>
+                    </div>
+                    <button type="submit" class="btn">Submit Review</button>
+                </form>
+                
             </div>
         </div>
 

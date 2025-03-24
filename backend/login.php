@@ -1,4 +1,8 @@
 <?php
+
+// Start a session to manage user login state
+session_start();
+
 // Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405); // Send 405 error if not POST
@@ -9,8 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 // Database connection (replace with your actual credentials)
 $servername = "localhost";
 $username = "root";
-$password = "";
-$dbname = "your_database_name";
+$password = "root";
+$dbname = "userInfo_db";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -31,20 +35,30 @@ $password = htmlspecialchars($password, ENT_QUOTES, 'UTF-8');
 // Check if form data is received correctly
 if ($email && $password) {
     // Use prepared statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT password_hash FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT user_id, username, password_hash FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);  // "s" denotes the string type
     $stmt->execute();
     $stmt->store_result();
 
     // Check if the user exists
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($password_hash);
+        $stmt->bind_result($user_id, $username, $password_hash);
         $stmt->fetch();
 
         // Verify password using password_hash() and password_verify() functions
         if (password_verify($password, $password_hash)) {
+            
+            // Set session variables
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['username'] = $username;
+            $_SESSION['email'] = $email;
+            $_SESSION['logged_in'] = true;
             echo "<h2>Login Successful</h2>";
             echo "Welcome, " . htmlspecialchars($email) . "!";
+            
+            // Redirect to myproduct.html after successful login
+            header("Location: ../myproduct.html");
+            exit;
         } else {
             echo "Error: Invalid email or password.";
         }

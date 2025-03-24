@@ -42,6 +42,14 @@
         font-size: 24px;
         position: relative;
       }
+      .upload-box #image-preview {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        z-index: 1;
+        display: none;
+        border-radius: 10px;
+      }
       .upload-box input {
         position: absolute;
         width: 100%;
@@ -142,50 +150,95 @@
           }
         });
 
-        const uploadBox = document.querySelector(".upload-box");
-        const fileInput = document.createElement("input");
-        fileInput.type = "file";
-        fileInput.accept = "image/*";
-        uploadBox.appendChild(fileInput);
+        const fileInput = document.querySelector('input[type="file"]');
+        const imagePreview = document.getElementById("image-preview");
+        const previewText = document.getElementById("preview-text");
+
+        fileInput.addEventListener("change", function () {
+          const file = this.files[0];
+          if (file) {
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+              imagePreview.src = this.result;
+              imagePreview.style.display = "block";
+              previewText.style.display = "none";
+            });
+
+            reader.readAsDataURL(file);
+          }
+        });
       });
     </script>
   </head>
   <body>
     <div class="title">Upload Photos Of Your Arts</div>
-    <div class="container">
-      <div class="upload-box">+<input type="file" accept="image/*" /></div>
-      <div class="form-container">
-        <label style="font-size: 20px; font-weight: bold"
-          >Name of your product:</label
-        >
-        <input type="text" placeholder="Product Name" />
+    <form
+      action="../backend/listingProduct.php"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="container">
+        <div class="upload-box">
+          <span id="preview-text">+</span>
+          <img id="image-preview" src="#" />
+          <input type="file" name="product_image" accept="image/*" required />
+        </div>
+        <div class="form-container">
+          <label style="font-size: 20px; font-weight: bold"
+            >Name of your product:</label
+          >
+          <input
+            type="text"
+            name="product_name"
+            placeholder="Product Name"
+            required
+          />
 
-        <label style="font-size: 20px; font-weight: bold">Price:</label>
-        <input type="number" placeholder="Price" min="1" max="999999" />
+          <label style="font-size: 20px; font-weight: bold">Price:</label>
+          <input
+            type="number"
+            name="price"
+            placeholder="Price"
+            min="1"
+            max="999999"
+            required
+          />
 
-        <label style="font-size: 20px; font-weight: bold">Description:</label>
-        <textarea placeholder="Product Description"></textarea>
+          <label style="font-size: 20px; font-weight: bold">Description:</label>
+          <textarea
+            name="description"
+            placeholder="Product Description"
+            required
+          ></textarea>
 
-        <label style="font-size: 20px; font-weight: bold">Category:</label>
-        <select>
-          <option>Choose the category</option>
-          <option>Clothing</option>
-          <option>Jewelry</option>
-          <option>Toys</option>
-          <option>Home Decoration</option>
-          <option>Kitchenware</option>
-          <option>Furniture</option>
-        </select>
+          <label style="font-size: 20px; font-weight: bold">Category:</label>
+          <select name="category" required>
+            <option value="">Choose the category</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Jewelry">Jewelry</option>
+            <option value="Toys">Toys</option>
+            <option value="Home Decoration">Home Decoration</option>
+            <option value="Kitchenware">Kitchenware</option>
+            <option value="Furniture">Furniture</option>
+          </select>
 
-        <div class="bottom-section">
-          <div class="quantity-container">
-            <button>-</button>
-            <input type="number" value="1" min="1" max="9999" />
-            <button>+</button>
+          <div class="bottom-section">
+            <div class="quantity-container">
+              <button type="button">-</button>
+              <input
+                type="number"
+                name="quantity"
+                value="1"
+                min="1"
+                max="9999"
+              />
+              <button type="button">+</button>
+            </div>
+            <button type="submit" class="btn">List Now</button>
           </div>
-          <button class="btn">List Now</button>
         </div>
       </div>
-    </div>
+    </form>
   </body>
 </html>
