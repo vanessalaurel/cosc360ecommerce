@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Database connection
     $servername = "localhost";
     $username = "root";
-    $password = "";
+    $password = "root";
     $dbname = "productInfo_db";
 
     // Create connection

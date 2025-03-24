@@ -1,195 +1,402 @@
 <!DOCTYPE html>
 <html lang="ca">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Artzy - Detalls del Producte</title>
-    <link rel="stylesheet" href="productDetails.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="productDetails.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const minusBtn = document.querySelector(
-            ".quantity-container button:first-child"
-          );
-          const plusBtn = document.querySelector(
-            ".quantity-container button:last-child"
-          );
-          const quantityInput = document.querySelector(
-            ".quantity-container input"
-          );
-  
-          minusBtn.addEventListener("click", function () {
-            let value = parseInt(quantityInput.value);
-            if (value > 1) {
-              quantityInput.value = value - 1;
-            }
-          });
-  
-          plusBtn.addEventListener("click", function () {
-            let value = parseInt(quantityInput.value);
-            if (value < 9999) {
-              quantityInput.value = value + 1;
-            }
-          });
-  
-          const uploadBox = document.querySelector(".upload-box");
-          const fileInput = document.createElement("input");
-          fileInput.type = "file";
-          fileInput.accept = "image/*";
-          uploadBox.appendChild(fileInput);
-        });
-      </script>
-</head>
-<body>
-    <header>
-        <div class="logo"><img src="Exclusive.png" alt="Logo"></div>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">Contact</a>
-            <a href="#">About</a>
-            <a href="#">Sign Up</a>
-            <a href="#">Sell</a>
+      document.addEventListener("DOMContentLoaded", function () {
+        const minusBtn = document.querySelector(
+          ".quantity-container button:first-child"
+        );
+        const plusBtn = document.querySelector(
+          ".quantity-container button:last-child"
+        );
+        const quantityInput = document.querySelector(
+          ".quantity-container input"
+        );
 
-        </nav>
-        <div class="search-cart">
-            <input type="text" placeholder="What are you looking for?">
-            <button><img src="Vector.png" alt=""></button>
-            <button><img src="Frame 551.png" style="position: relative; top: 7px;"></button>
-            <button><img src="user.png" style="position: relative; top: 7px;"></button>
-        </div>
+        minusBtn.addEventListener("click", function () {
+          let value = parseInt(quantityInput.value);
+          if (value > 1) {
+            quantityInput.value = value - 1;
+          }
+        });
+
+        plusBtn.addEventListener("click", function () {
+          let value = parseInt(quantityInput.value);
+          if (value < 9999) {
+            quantityInput.value = value + 1;
+          }
+        });
+
+        const reviewImageInput = document.querySelector(
+          'input[name="review_image"]'
+        );
+        const previewImage = document.createElement("img");
+        previewImage.className = "preview-image";
+        const uploadBox = document.querySelector(".upload-box");
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        uploadBox.appendChild(previewImage);
+
+        // Handle file selection
+        reviewImageInput.addEventListener("change", function () {
+          if (this.files && this.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              previewImage.src = e.target.result;
+              previewImage.style.display = "block";
+              uploadBoxPlus.style.display = "none";
+            };
+
+            reader.readAsDataURL(this.files[0]);
+          } else {
+            previewImage.style.display = "none";
+            uploadBoxPlus.style.display = "block";
+          }
+        });
+
+        // Get the product ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get("id") || 1; // Default to 1 if not specified
+
+        // Track the last review ID to fetch only new ones
+        let lastFeedbackId = 0;
+
+        // Initial load of reviews
+        loadReviews();
+
+        // Set up periodic refresh for new reviews
+        setInterval(loadReviews, 5000); // Check for new reviews every 5 seconds
+
+        // Set up review form submission
+        const reviewForm = document.getElementById("review-form");
+        if (reviewForm) {
+          reviewForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            submitReview();
+          });
+        }
+
+        // Function to load reviews using AJAX
+        function loadReviews() {
+          fetch(`../backend/reviews.php?last_feedback_id=${lastFeedbackId}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.error) {
+                console.error("Error loading reviews:", data.error);
+                return;
+              }
+
+              if (data.reviews && data.reviews.length > 0) {
+                // Update the last feedback ID for the next check
+                lastFeedbackId = Math.max(
+                  ...data.reviews.map((review) => review.feedback_id)
+                );
+
+                // Add new reviews to the page
+                appendReviews(data.reviews);
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching reviews:", error);
+            });
+        }
+
+        // Function to append new reviews to the page
+        function appendReviews(reviews) {
+          const reviewsContainer = document.querySelector(".reviews");
+
+          reviews.forEach((review) => {
+            // Check if this review is already displayed
+            const existingReview = document.querySelector(
+              `.review-item-${review.feedback_id}`
+            );
+            if (existingReview) return;
+
+            // Create new review element
+            const reviewElement = document.createElement("div");
+            reviewElement.className = `user review-item-${review.feedback_id}`;
+
+            // Format the date
+            const reviewDate = new Date(review.feedback_date);
+            const formattedDate =
+              reviewDate.toLocaleDateString() +
+              " " +
+              reviewDate.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+
+            reviewElement.innerHTML = `
+                        <img src="qr.jpeg" alt="Foto de perfil">
+                        <div class="description">
+                            <h4>${review.username}</h4>
+                            <div class="rating">Rating: ${review.rating}/5</div>
+                            <p>${review.comment}</p>
+                            <small>${formattedDate}</small>
+                        </div>
+                    `;
+
+            // Insert at the beginning for newest first
+            const firstReview = reviewsContainer.querySelector(".user");
+            if (firstReview) {
+              reviewsContainer.insertBefore(reviewElement, firstReview);
+            } else {
+              reviewsContainer.appendChild(reviewElement);
+            }
+          });
+        }
+
+        // Function to submit a new review
+        function submitReview() {
+          const reviewText = document.querySelector(
+            'input[name="review_text"]'
+          ).value;
+          const ratingValue =
+            document.querySelector('select[name="rating"]')?.value || 5;
+
+          if (!reviewText.trim()) {
+            alert("Please enter a review comment");
+            return;
+          }
+
+          // Create form data object
+          const formData = new FormData();
+          formData.append("review_text", reviewText);
+          formData.append("rating", ratingValue);
+
+          // Handle file upload if present
+          const fileInput = document.querySelector(
+            'input[name="review_image"]'
+          );
+          if (fileInput && fileInput.files[0]) {
+            formData.append("review_image", fileInput.files[0]);
+          }
+
+          // Submit using fetch
+          fetch("../backend/fetchReview.php", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.error) {
+                alert(data.error);
+                return;
+              }
+
+              if (data.success) {
+                // Clear the form
+                document.querySelector('input[name="review_text"]').value = "";
+                if (fileInput) fileInput.value = "";
+
+                // If we got the new review back, add it to the page
+                if (data.review) {
+                  appendReviews([data.review]);
+                  lastFeedbackId = Math.max(
+                    lastFeedbackId,
+                    data.review.feedback_id
+                  );
+                }
+
+                alert("Review submitted successfully!");
+              }
+            })
+            .catch((error) => {
+              console.error("Error submitting review:", error);
+              alert("An error occurred while submitting your review");
+            });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="logo"><img src="Exclusive.png" alt="Logo" /></div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Contact</a>
+        <a href="#">About</a>
+        <a href="#">Sign Up</a>
+        <a href="#">Sell</a>
+      </nav>
+      <div class="search-cart">
+        <input type="text" placeholder="What are you looking for?" />
+        <button><img src="Vector.png" alt="" /></button>
+        <button>
+          <img src="Frame 551.png" style="position: relative; top: 7px" />
+        </button>
+        <button>
+          <img src="user.png" style="position: relative; top: 7px" />
+        </button>
+      </div>
     </header>
 
     <main class="firstLine">
-        <div>
-            <nav>
-                <a href="#">Home</a>
-                <a href="#">Pottery</a>
-                <a href="#">Pottery Real Handmade 01</a>
-            </nav>
-        </div>
-        <div class="sell">
-            Sell
-        </div>
+      <div>
+        <nav>
+          <a href="#">Home</a>
+          <a href="#">Pottery</a>
+          <a href="#">Pottery Real Handmade 01</a>
+        </nav>
+      </div>
+      <div class="sell">Sell</div>
     </main>
 
     <div class="container">
-        <div class="column small-images">
-            <img src="qr.jpeg" alt="Image 1">
-            <img src="qr.jpeg" alt="Image 2">
-            <img src="qr.jpeg" alt="Image 3">
-            <img src="qr.jpeg" alt="Image 4">
-            <img src="qr.jpeg" alt="Image 5">
+      <div class="column small-images">
+        <img src="qr.jpeg" alt="Image 1" />
+        <img src="qr.jpeg" alt="Image 2" />
+        <img src="qr.jpeg" alt="Image 3" />
+        <img src="qr.jpeg" alt="Image 4" />
+        <img src="qr.jpeg" alt="Image 5" />
+      </div>
+      <div class="column large-image">
+        <img src="fang.jpeg" alt="Large Image" />
+      </div>
+      <div class="column text-content">
+        <h2>Pottery real Handmade 01</h2>
+        <p style="font-size: 24px">$192.00</p>
+        <p>
+          This is the text content. You can add more paragraphs, descriptions,
+          or any other information here. This is the text content. You can add
+          more paragraphs, descriptions, or any other information here.
+        </p>
+        <hr />
+        <div class="bottom-section">
+          <div class="quantity-container">
+            <button>-</button>
+            <input type="number" value="1" min="1" max="9999" />
+            <button>+</button>
+          </div>
+          <button class="btn">Buy Now</button>
         </div>
-        <div class="column large-image">
-            <img src="fang.jpeg" alt="Large Image">
+        <div>
+          <img src="Frame.png" alt="" />
         </div>
-        <div class="column text-content">
-            <h2>Pottery real Handmade 01</h2>
-            <p style="font-size: 24px;">$192.00</p>
-            <p>This is the text content. You can add more paragraphs, descriptions, or any other information here. This is the text content. You can add more paragraphs, descriptions, or any other information here.</p>
-            <hr>
-            <div class="bottom-section">
-                <div class="quantity-container">
-                  <button>-</button>
-                  <input type="number" value="1" min="1" max="9999" />
-                  <button>+</button>
-                </div>
-                <button class="btn">Buy Now</button>
-              </div>
-              <div>
-                <img src="Frame.png" alt="">
-              </div>
-        </div>
+      </div>
     </div>
 
     <div class="grid-container">
-        <div class="columna columna-esquerra">
-            <div class="review-form">
-                <form action="submit_review.php" method="POST" enctype="multipart/form-data" class="review-form">
-                    <h2>Post Your Review</h2>
-                    <div class="review-inputs">
-                        <label class="upload-box">
-                            <span>+</span>
-                            <input type="file" name="review_image" accept="image/*" hidden />
-                        </label>
-                        <input type="text" name="review_text" class="textReview" placeholder="Write your review" required>
-                    </div>
-                    <button type="submit" class="btn">Submit Review</button>
-                </form>
-                
+      <div class="columna columna-esquerra">
+        <div class="review-form">
+          <form
+            id="review-form"
+            action="javascript:void(0);"
+            method="POST"
+            enctype="multipart/form-data"
+            class="review-form"
+          >
+            <h2>Post Your Review</h2>
+            <div class="review-inputs">
+              <label class="upload-box">
+                <span>+</span>
+                <input
+                  type="file"
+                  name="review_image"
+                  accept="image/*"
+                  hidden
+                />
+              </label>
+              <input
+                type="text"
+                name="review_text"
+                class="textReview"
+                placeholder="Write your review"
+                required
+              />
             </div>
+            <div class="rating-select">
+              <label for="rating">Rating:</label>
+              <select name="rating" id="rating">
+                <option value="5">5 Stars - Excellent</option>
+                <option value="4">4 Stars - Very Good</option>
+                <option value="3">3 Stars - Good</option>
+                <option value="2">2 Stars - Fair</option>
+                <option value="1">1 Star - Poor</option>
+              </select>
+            </div>
+            <button type="submit" class="btn">Submit Review</button>
+          </form>
         </div>
+      </div>
 
-        <div class="columna columna-dreta">
-            <div class="producte">
-                <img src="qr.jpeg" alt="Imatge del producte">
-                <h3>Product Name</h3>
-                <p class="preu"><u>19.99€</u></p>
-            </div>
-            <div class="producte">
-                <img src="qr.jpeg" alt="Imatge del producte">
-                <h3>Product Name</h3>
-                <p class="preu"><u>19.99€</u></p>
-            </div>
+      <div class="columna columna-dreta">
+        <div class="producte">
+          <img src="qr.jpeg" alt="Imatge del producte" />
+          <h3>Product Name</h3>
+          <p class="preu"><u>19.99€</u></p>
         </div>
+        <div class="producte">
+          <img src="qr.jpeg" alt="Imatge del producte" />
+          <h3>Product Name</h3>
+          <p class="preu"><u>19.99€</u></p>
+        </div>
+      </div>
     </div>
-
 
     <div class="reviews">
-        <h2 style="padding-left: 20px;">Reviews</h2>
-        <div class="user">
-            <img src="qr.jpeg" alt="Foto de perfil">
-            <div class="description">
-                <h4>User 01</h4>
-                <p>Really good product, it's very usefull.</p>
-            </div>
+      <h2 style="padding-left: 20px">Reviews</h2>
+      <div class="user">
+        <img src="qr.jpeg" alt="Foto de perfil" />
+        <div class="description">
+          <h4>User 01</h4>
+          <p>Really good product, it's very usefull.</p>
         </div>
-        
+      </div>
     </div>
 
-
     <footer>
-        <div class="footer-content">
-            <div class="exclusive">
-                <h3>Exclusive</h3>
-                <p>Subscribe</p>
-                <p>Get 10% off your first order</p>
-                <input type="email" placeholder="Enter your email">
-            </div>
-            <div class="support">
-                <h3>Support</h3>
-                <p>111 Bijoy Sarani, Dhaka, DH 1515, Bangladesh.</p>
-                <p>exclusive@gmail.com</p>
-                <p>+88015-88888-9999</p>
-            </div>
-            <div class="account">
-                <h3>Account</h3>
-                <p>My Account</p>
-                <p>Login / Register</p>
-                <p>Cart</p>
-                <p>Wishlist</p>
-                <p>Shop</p>
-            </div>
-            <div class="quick-links">
-                <h3>Quick Link</h3>
-                <p>Privacy Policy</p>
-                <p>Terms Of Use</p>
-                <p>FAQ</p>
-                <p>Contact</p>
-            </div>
-            <div class="download-app">
-                <h3>Download App</h3>
-                <p style="font-size: 12px;">Save $3 with App New User Only</p>
-                <div>
-                    <img src="Frame 719.png" alt="">
-                </div>
-                <div>
-                    <img src="Frame 741.png" alt="">
-                </div>
-            </div>
+      <div class="footer-content">
+        <div class="exclusive">
+          <h3>Exclusive</h3>
+          <p>Subscribe</p>
+          <p>Get 10% off your first order</p>
+          <input type="email" placeholder="Enter your email" />
         </div>
-        <p class="copyright">© Copyright Rimel 2022. All rights reserved</p>
+        <div class="support">
+          <h3>Support</h3>
+          <p>111 Bijoy Sarani, Dhaka, DH 1515, Bangladesh.</p>
+          <p>exclusive@gmail.com</p>
+          <p>+88015-88888-9999</p>
+        </div>
+        <div class="account">
+          <h3>Account</h3>
+          <p>My Account</p>
+          <p>Login / Register</p>
+          <p>Cart</p>
+          <p>Wishlist</p>
+          <p>Shop</p>
+        </div>
+        <div class="quick-links">
+          <h3>Quick Link</h3>
+          <p>Privacy Policy</p>
+          <p>Terms Of Use</p>
+          <p>FAQ</p>
+          <p>Contact</p>
+        </div>
+        <div class="download-app">
+          <h3>Download App</h3>
+          <p style="font-size: 12px">Save $3 with App New User Only</p>
+          <div>
+            <img src="Frame 719.png" alt="" />
+          </div>
+          <div>
+            <img src="Frame 741.png" alt="" />
+          </div>
+        </div>
+      </div>
+      <p class="copyright">© Copyright Rimel 2022. All rights reserved</p>
     </footer>
-</body>
+  </body>
 </html>
