@@ -14,7 +14,7 @@ if (!isset($_SESSION['user_id'])) {
 // Database connection
 $servername = "localhost";
 $username = "root";
-$password = "";
+$password = "root"; // Changed from empty string to "root" to match your other files
 $dbname = "productInfo_db";
 
 // Create connection
@@ -22,7 +22,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    echo json_encode(['error' => 'Database connection failed']);
+    echo json_encode(['error' => 'Database connection failed: ' . $conn->connect_error]);
     exit;
 }
 
@@ -38,6 +38,13 @@ $result = $stmt->get_result();
 // Store products in an array
 $products = [];
 while ($row = $result->fetch_assoc()) {
+    // Make sure image path is properly formatted
+    if (!empty($row['image_path'])) {
+        // If the path doesn't start with http or /, make it relative to the root
+        if (strpos($row['image_path'], 'http') !== 0 && strpos($row['image_path'], '/') !== 0) {
+            $row['image_path'] = '../' . $row['image_path'];
+        }
+    }
     $products[] = $row;
 }
 
@@ -45,6 +52,9 @@ while ($row = $result->fetch_assoc()) {
 $stmt->close();
 $conn->close();
 
-// Return products as JSON
-echo json_encode(['products' => $products]);
+// Return products as JSON with total count
+echo json_encode([
+    'products' => $products,
+    'total' => count($products)
+]);
 ?>

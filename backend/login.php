@@ -5,7 +5,7 @@ session_start();
 
 // If the user is already logged in, redirect them to myproduct.html
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    header("Location: ../myproduct.html");
+    header("Location: ../frontend/Homepage.html");
     exit;
 }
 
@@ -61,7 +61,7 @@ if ($email && $password) {
             $_SESSION['logged_in'] = true; // Explicit login state
 
             // Redirect to myproduct.html after successful login
-            header("Location: ../myproduct.html");
+            header("Location: ../frontend/Homepage.html");
             exit;
         } else {
             echo "Error: Invalid email or password.";

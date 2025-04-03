@@ -246,35 +246,716 @@
         display: flex;
         gap: 5px;
       }
+      /* Style for the add new product button */
+      .add-product-btn {
+        background-color: #5a2d0c;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: auto;
+        display: inline-block;
+      }
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .add-product-btn {
+        margin-right: 40px; /* Add space from the right edge */
+      }
+      .empty-products-message {
+        text-align: center;
+        padding: 40px;
+        width: 100%;
+      }
+      .loading-message {
+        text-align: center;
+        padding: 40px;
+        width: 100%;
+      }
+      .category-badge {
+        display: inline-block;
+        background-color: #f0f0f0;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+      .edit-product {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(90, 45, 12, 0.8);
+        color: white;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+      }
+      .product-image:hover .edit-product {
+        transform: translateY(0);
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        overflow-y: auto;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .close {
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      .modal-body {
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .form-group textarea {
+        min-height: 100px;
+      }
+
+      .image-preview {
+        max-width: 200px;
+        max-height: 200px;
+        margin: 10px 0;
+        border-radius: 5px;
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .modal-footer button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .save-button {
+        background-color: #5a2d0c;
+        color: white;
+      }
+
+      .delete-button {
+        background-color: #d32f2f;
+        color: white;
+      }
+
+      .cancel-button {
+        background-color: #f0f0f0;
+        color: #333;
+      }
+
+      /* Delete confirmation modal */
+      .delete-modal {
+        display: none;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .delete-modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 400px;
+        text-align: center;
+      }
+
+      .delete-modal-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .delete-modal-buttons button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .confirm-delete {
+        background-color: #d32f2f;
+        color: white;
+        font-weight: bold;
+      }
+
+      .cancel-delete {
+        background-color: #f0f0f0;
+        color: #333;
+      }
+
+      /* Notification styles */
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background-color: #4caf50;
+        color: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 1001;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .notification.error {
+        background-color: #f44336;
+      }
+
+      .notification.show {
+        opacity: 1;
+      }
     </style>
     <script>
       let currentPage = 1;
       const productsPerPage = 6;
+      let currentProductIdToDelete = null;
+
+      // Fetch user products when the page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        fetchUserProducts();
+
+        // Create modal for editing products
+        createEditModal();
+
+        // Create modal for delete confirmation
+        createDeleteModal();
+
+        // Create notification element
+        createNotification();
+      });
+
+      function createEditModal() {
+        const modal = document.createElement("div");
+        modal.className = "modal";
+        modal.id = "editModal";
+
+        modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Product</h2>
+        <span class="close" onclick="closeEditModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="editProductForm" enctype="multipart/form-data">
+          <input type="hidden" id="edit-product-id" name="product_id">
+          
+          <div class="form-group">
+            <label for="edit-product-name">Product Name</label>
+            <input type="text" id="edit-product-name" name="product_name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-price">Price ($)</label>
+            <input type="number" id="edit-price" name="price" min="0.01" step="0.01" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-category">Category</label>
+            <select id="edit-category" name="category" required>
+              <option value="">Select Category</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Toys">Toys</option>
+              <option value="Home Decoration">Home Decoration</option>
+              <option value="Kitchenware">Kitchenware</option>
+              <option value="Furniture">Furniture</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-quantity">Quantity</label>
+            <input type="number" id="edit-quantity" name="quantity" min="1" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-description">Description</label>
+            <textarea id="edit-description" name="description" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-product-image">Product Image</label>
+            <input type="file" id="edit-product-image" name="product_image" accept="image/*">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="delete-button" onclick="showDeleteConfirmation()">Delete Product</button>
+        <div>
+          <button class="cancel-button" onclick="closeEditModal()">Cancel</button>
+          <button class="save-button" onclick="saveProductChanges()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+        document.body.appendChild(modal);
+      }
+
+      function createDeleteModal() {
+        const modal = document.createElement("div");
+        modal.className = "delete-modal";
+        modal.id = "deleteModal";
+
+        modal.innerHTML = `
+          <div class="delete-modal-content">
+            <h3>Delete Product</h3>
+            <p>Are you sure you want to delete this product? This action cannot be undone.</p>
+            <div class="delete-modal-buttons">
+              <button class="cancel-delete" onclick="closeDeleteModal()">Cancel</button>
+              <button class="confirm-delete" onclick="confirmDelete()">Delete</button>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+      }
+
+      function createNotification() {
+        const notification = document.createElement("div");
+        notification.className = "notification";
+        notification.id = "notification";
+        document.body.appendChild(notification);
+      }
+
+      function showNotification(message, isError = false) {
+        const notification = document.getElementById("notification");
+        notification.textContent = message;
+        notification.className = isError
+          ? "notification error show"
+          : "notification show";
+
+        setTimeout(() => {
+          notification.className = isError
+            ? "notification error"
+            : "notification";
+        }, 3000);
+      }
+
+      function fetchUserProducts() {
+        // Show loading message
+        const productsContainer = document.querySelector(".products");
+        productsContainer.innerHTML = `
+          <div class="loading-message">
+            <p>Loading your products...</p>
+          </div>
+        `;
+
+        // Log for debugging
+        console.log("Fetching products...");
+
+        // Fetch products from the server
+        fetch("../backend/getUserProduct.php")
+          .then((response) => {
+            console.log("Response status:", response.status);
+            return response.text().then((text) => {
+              try {
+                // Try to parse the response as JSON
+                const data = JSON.parse(text);
+                console.log("Response data:", data);
+                return data;
+              } catch (error) {
+                // If it's not valid JSON, log the raw response
+                console.error("Invalid JSON response:", text);
+                throw new Error("Invalid JSON response");
+              }
+            });
+          })
+          .then((data) => {
+            if (data.error) {
+              // Handle error (e.g., redirect to login)
+              console.error("Error:", data.error);
+              productsContainer.innerHTML = `
+                <div class="empty-products-message">
+                  <p>Error: ${data.error}</p>
+                  <p>You may need to <a href="login.html">log in</a> again.</p>
+                </div>
+              `;
+              return;
+            }
+
+            // Update total products count
+            document.getElementById("total-products").textContent =
+              data.total || data.products.length;
+
+            // Display products
+            console.log("Products received:", data.products);
+            displayProducts(data.products);
+          })
+          .catch((error) => {
+            console.error("Error fetching products:", error);
+            productsContainer.innerHTML = `
+              <div class="empty-products-message">
+                <p>Error loading products. Please try again later.</p>
+                <p>Technical details: ${error.message}</p>
+              </div>
+            `;
+          });
+      }
+
+      function displayProducts(products) {
+        const productsContainer = document.querySelector(".products");
+
+        // Clear existing content
+        productsContainer.innerHTML = "";
+
+        // Check if there are any products
+        if (!products || products.length === 0) {
+          productsContainer.innerHTML = `
+            <div class="empty-products-message">
+              <p>You haven't listed any products yet.</p>
+              <a href="Listingpage.html" style="
+                display: inline-block;
+                margin-top: 20px;
+                background-color: #5a2d0c; 
+                color: white; 
+                padding: 15px 30px; 
+                border-radius: 10px; 
+                text-decoration: none;
+                font-weight: bold;
+              ">
+                List Your First Product
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        // Add products
+        products.forEach((product) => {
+          const productCard = document.createElement("div");
+          productCard.className = "product-card";
+          productCard.dataset.productId = product.product_id;
+
+          productCard.innerHTML = `
+            <div class="product-image">
+              <img
+                src="${product.image_path}"
+                alt="${product.product_name}"
+                class="product-image-img"
+                onerror="this.src='../Source/productEcomm.png';"
+              />
+              <div class="edit-product" onclick="openEditModal(${
+                product.product_id
+              })">Edit Product</div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">${product.product_name}</h3>
+              <p class="product-price">$${parseFloat(product.price).toFixed(
+                2
+              )}</p>
+              <span class="category-badge">${product.category}</span>
+              <p>Qty: ${product.quantity}</p>
+            </div>
+          `;
+
+          productsContainer.appendChild(productCard);
+        });
+
+        // Initialize pagination
+        showPage(1);
+      }
+
+      function openEditModal(productId) {
+        // Fetch product details
+        fetch(`../backend/getProductDetails.php?product_id=${productId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              const product = data.product;
+
+              // Fill the form with product details
+              document.getElementById("edit-product-id").value =
+                product.product_id;
+              document.getElementById("edit-product-name").value =
+                product.product_name;
+              document.getElementById("edit-price").value = product.price;
+              document.getElementById("edit-category").value = product.category;
+              document.getElementById("edit-quantity").value = product.quantity;
+              document.getElementById("edit-description").value =
+                product.description;
+
+              // Store the current product ID for delete action
+              currentProductIdToDelete = product.product_id;
+
+              // Show the modal
+              document.getElementById("editModal").style.display = "block";
+            } else {
+              showNotification(
+                data.error || "Failed to load product details",
+                true
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching product details:", error);
+            showNotification(
+              "An error occurred while loading product details",
+              true
+            );
+          });
+      }
+
+      function closeEditModal() {
+        document.getElementById("editModal").style.display = "none";
+        document.getElementById("editProductForm").reset();
+      }
+
+      function showDeleteConfirmation() {
+        document.getElementById("deleteModal").style.display = "block";
+      }
+
+      function closeDeleteModal() {
+        document.getElementById("deleteModal").style.display = "none";
+      }
+
+      function confirmDelete() {
+        if (!currentProductIdToDelete) return;
+
+        const formData = new FormData();
+        formData.append("product_id", currentProductIdToDelete);
+
+        fetch("../backend/deleteProduct.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            closeDeleteModal();
+            closeEditModal();
+
+            if (data.success) {
+              // Remove the product from the UI
+              const productCard = document.querySelector(
+                `.product-card[data-product-id="${currentProductIdToDelete}"]`
+              );
+              if (productCard) {
+                productCard.remove();
+              }
+
+              // Update product count
+              const totalProducts = document.getElementById("total-products");
+              const currentCount = parseInt(totalProducts.textContent);
+              totalProducts.textContent = Math.max(0, currentCount - 1);
+
+              // Show success message
+              showNotification("Product deleted successfully");
+
+              // Refresh the product list
+              fetchUserProducts();
+            } else {
+              // Show error message
+              showNotification(data.error || "Failed to delete product", true);
+            }
+          })
+          .catch((error) => {
+            closeDeleteModal();
+            console.error("Error deleting product:", error);
+            showNotification(
+              "An error occurred while deleting the product",
+              true
+            );
+          });
+      }
+
+      function saveProductChanges() {
+        const form = document.getElementById("editProductForm");
+        const formData = new FormData(form);
+
+        // Debugging: Log form data
+        console.log("Form data being submitted:");
+        for (let [key, value] of formData.entries()) {
+          if (key === "product_image" && value instanceof File) {
+            console.log(
+              `${key}: File named ${value.name}, size: ${value.size} bytes, type: ${value.type}`
+            );
+          } else {
+            console.log(`${key}: ${value}`);
+          }
+        }
+
+        // Validate form
+        const productName = formData.get("product_name");
+        const price = formData.get("price");
+        const category = formData.get("category");
+        const quantity = formData.get("quantity");
+        const description = formData.get("description");
+
+        if (!productName || !price || !category || !quantity || !description) {
+          showNotification("Please fill in all required fields", true);
+          return;
+        }
+
+        // Submit the form data
+        fetch("../backend/editProduct.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            console.log("Response status:", response.status);
+            return response.text().then((text) => {
+              try {
+                // Try to parse the response as JSON
+                const data = JSON.parse(text);
+                console.log("Response data:", data);
+                return data;
+              } catch (error) {
+                // If it's not valid JSON, log the raw response
+                console.error("Invalid JSON response:", text);
+                throw new Error("Invalid JSON response");
+              }
+            });
+          })
+          .then((data) => {
+            if (data.success) {
+              // Close the modal
+              closeEditModal();
+
+              // Show success message
+              showNotification("Product updated successfully");
+
+              // Refresh the product list
+              fetchUserProducts();
+            } else {
+              console.error("Error from server:", data.error);
+              if (data.debug) {
+                console.log("Debug info:", data.debug);
+              }
+              showNotification(data.error || "Failed to update product", true);
+            }
+          })
+          .catch((error) => {
+            console.error("Error updating product:", error);
+            showNotification(
+              "An error occurred while updating the product",
+              true
+            );
+          });
+      }
+
+      function filterByCategory() {
+        const category = document.getElementById("category").value;
+        const productCards = document.querySelectorAll(".product-card");
+
+        // If "All Categories" is selected, show all products
+        if (category === "All Categories") {
+          productCards.forEach((card) => {
+            card.style.display = "";
+          });
+        } else {
+          // Otherwise, show only products in the selected category
+          productCards.forEach((card) => {
+            const productCategory =
+              card.querySelector(".category-badge").textContent;
+            if (productCategory === category) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        }
+
+        // Reset pagination to page 1
+        showPage(1);
+      }
+
       function showPage(page) {
         const products = document.querySelectorAll(".product-card");
-        products.forEach((product, index) => {
+        const visibleProducts = Array.from(products).filter(
+          (product) => product.style.display !== "none"
+        );
+
+        visibleProducts.forEach((product, index) => {
           product.style.display =
             index >= (page - 1) * productsPerPage &&
             index < page * productsPerPage
-              ? "block"
+              ? ""
               : "none";
         });
+
         currentPage = page;
         updatePageNumbers();
       }
+
       function nextPage() {
-        const totalPages = Math.ceil(
-          document.querySelectorAll(".product-card").length / productsPerPage
-        );
+        const visibleProducts = Array.from(
+          document.querySelectorAll(".product-card")
+        ).filter((product) => product.style.display !== "none");
+
+        const totalPages = Math.ceil(visibleProducts.length / productsPerPage);
         if (currentPage < totalPages) showPage(currentPage + 1);
       }
+
       function prevPage() {
         if (currentPage > 1) showPage(currentPage - 1);
       }
+
       function updatePageNumbers() {
-        const totalPages = Math.ceil(
-          document.querySelectorAll(".product-card").length / productsPerPage
-        );
+        const visibleProducts = Array.from(
+          document.querySelectorAll(".product-card")
+        ).filter((product) => product.style.display !== "none");
+
+        const totalPages = Math.ceil(visibleProducts.length / productsPerPage);
         const pageNumbersContainer = document.getElementById("page-numbers");
         pageNumbersContainer.innerHTML = "";
 
@@ -307,9 +988,6 @@
           pageNumbersContainer.appendChild(pageElement);
         });
       }
-      window.onload = function () {
-        showPage(1);
-      };
     </script>
   </head>
   <body>
@@ -328,11 +1006,11 @@
       <div class="stats">
         <div class="stat-box">
           <h3>Total Products</h3>
-          <p id="total-products">8</p>
+          <p id="total-products">0</p>
         </div>
         <div class="stat-box">
           <h3>Positive Feedback</h3>
-          <p id="positive-feedback">65</p>
+          <p id="positive-feedback">0</p>
         </div>
         <div class="stat-box">
           <h3>Negative Feedback</h3>
@@ -340,7 +1018,8 @@
         </div>
       </div>
       <div class="dropdown">
-        <select id="category">
+        <select id="category" onchange="filterByCategory()">
+          <option>All Categories</option>
           <option>Clothing</option>
           <option>Jewelry</option>
           <option>Toys</option>
@@ -351,146 +1030,26 @@
       </div>
       <div class="content-container">
         <section class="best-sellers">
-          <div style="display: flex">
+          <div class="header-container">
             <h2 style="font-size: 36px; color: black; margin-left: 30px">
               Products
             </h2>
+            <a href="Listingpage.html" class="add-product-btn"
+              >+ Add New Product</a
+            >
           </div>
           <div class="products-section">
+            <!-- This div will be populated dynamically with products -->
             <div class="products">
-              <div class="product-card">
-                <div class="product-image">
-                  <img
-                    src="productEcomm.png"
-                    alt="Handmade Soap"
-                    class="product-image-img"
-                  />
-                  <div class="add-to-cart">Add to Cart</div>
-                </div>
-
-                <div class="product-info">
-                  <h3 class="product-title">Handmade Soap</h3>
-                  <p class="product-price">
-                    $260 <span class="product-old-price">$360</span>
-                  </p>
-                  <p class="product-rating">★★★★★ (65)</p>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">
-                  <img
-                    src="productEcomm.png"
-                    alt="Handmade Soap"
-                    class="product-image-img"
-                  />
-                  <div class="add-to-cart">Add to Cart</div>
-                </div>
-                <div class="product-info">
-                  <h3 class="product-title">Handmade Soap</h3>
-                  <p class="product-price">
-                    $960 <span class="product-old-price">$1160</span>
-                  </p>
-                  <p class="product-rating">★★★★★ (65)</p>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">
-                  <img
-                    src="productEcomm.png"
-                    alt="Handmade Soap"
-                    class="product-image-img"
-                  />
-                  <div class="add-to-cart">Add to Cart</div>
-                </div>
-                <div class="product-info">
-                  <h3 class="product-title">Handmade Soap</h3>
-                  <p class="product-price">
-                    $160 <span class="product-old-price">$170</span>
-                  </p>
-                  <p class="product-rating">★★★★☆ (65)</p>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">
-                  <img
-                    src="productEcomm.png"
-                    alt="Handmade Soap"
-                    class="product-image-img"
-                  />
-                  <div class="add-to-cart">Add to Cart</div>
-                </div>
-                <div class="product-info">
-                  <h3 class="product-title">Handmade Soap</h3>
-                  <p class="product-price">$360</p>
-                  <p class="product-rating">★★★★★ (65)</p>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">
-                  <img
-                    src="productEcomm.png"
-                    alt="Handmade Soap"
-                    class="product-image-img"
-                  />
-                  <div class="add-to-cart">Add to Cart</div>
-                </div>
-                <div class="product-info">
-                  <h3 class="product-title">Handmade Soap</h3>
-                  <p class="product-price">$360</p>
-                  <p class="product-rating">★★★★★ (65)</p>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">
-                  <img
-                    src="productEcomm.png"
-                    alt="Handmade Soap"
-                    class="product-image-img"
-                  />
-                  <div class="add-to-cart">Add to Cart</div>
-                </div>
-                <div class="product-info">
-                  <h3 class="product-title">Handmade Soap</h3>
-                  <p class="product-price">$360</p>
-                  <p class="product-rating">★★★★★ (65)</p>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">
-                  <img
-                    src="productEcomm.png"
-                    alt="Handmade Soap"
-                    class="product-image-img"
-                  />
-                  <div class="add-to-cart">Add to Cart</div>
-                </div>
-                <div class="product-info">
-                  <h3 class="product-title">Handmade Soap</h3>
-                  <p class="product-price">$360</p>
-                  <p class="product-rating">★★★★★ (65)</p>
-                </div>
-              </div>
-              <div class="product-card">
-                <div class="product-image">
-                  <img
-                    src="productEcomm.png"
-                    alt="Handmade Soap"
-                    class="product-image-img"
-                  />
-                  <div class="add-to-cart">Add to Cart</div>
-                </div>
-                <div class="product-info">
-                  <h3 class="product-title">Handmade Soap</h3>
-                  <p class="product-price">$360</p>
-                  <p class="product-rating">★★★★★ (65)</p>
-                </div>
+              <div class="loading-message">
+                <p>Loading your products...</p>
               </div>
             </div>
             <div class="pagination-container">
               <div class="pagination">
                 <button onclick="prevPage()">&lt; Previous</button>
-                <div class="page-numbers">
-                  <span id="current-page">1</span>
+                <div class="page-numbers" id="page-numbers">
+                  <!-- Page numbers will be added by JavaScript -->
                 </div>
                 <button onclick="nextPage()">Next &gt;</button>
               </div>

@@ -8,7 +8,7 @@ session_start(); // Start a session to access user information
 // Check if user is logged in (you'll need to implement proper session handling in your login system)
 if (!isset($_SESSION['user_id'])) {
     // Redirect to login page if not logged in
-    header("Location: ../login.html");
+    header("Location: ../frontend/login.html");
     exit;
 }
 
@@ -73,8 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("isdssis", $user_id, $product_name, $price, $description, $category, $quantity, $image_path);
     
     if ($stmt->execute()) {
-        // Redirect to the myproduct page after successful listing
-        header("Location: /myproduct.html");
+        // Redirect to the Profilepage.html after successful listing
+        header("Location: ../frontend/Profilepage.html");
         exit;
     } else {
         echo "Error: " . $stmt->error;
@@ -84,4 +84,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
     $conn->close();
 }
-?>
+?>  
