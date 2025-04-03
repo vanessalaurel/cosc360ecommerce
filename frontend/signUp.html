@@ -69,6 +69,7 @@
             id="signup-form"
             action="../backend/signup.php"
             method="POST"
+            enctype="multipart/form-data"
             onsubmit="validateForm(event)"
           >
             <label>Username</label>
@@ -91,6 +92,13 @@
               id="password"
               name="password"
               placeholder="Enter your password"
+            />
+            <label>Profile Image</label>
+            <input
+              type="file"
+              id="profileImage"
+              name="profileImage"
+              accept="image/*"
             />
             <button type="submit">Sign up</button>
           </form>
