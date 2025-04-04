@@ -470,9 +470,17 @@
       let currentPage = 1;
       const productsPerPage = 6;
       let currentProductIdToDelete = null;
+      let currentUser = {
+        username: "User",
+        initials: "U",
+      };
 
       // Fetch user products when the page loads
       document.addEventListener("DOMContentLoaded", function () {
+        // Get user information first
+        fetchUserInfo();
+
+        // Then fetch products
         fetchUserProducts();
 
         // Create modal for editing products
@@ -484,6 +492,37 @@
         // Create notification element
         createNotification();
       });
+
+      // Function to fetch user information
+      function fetchUserInfo() {
+        fetch("../backend/getUserInfo.php")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Store user info
+              currentUser.username = data.user.username;
+
+              // Generate initials from username
+              const nameParts = data.user.username.split(" ");
+              if (nameParts.length > 1) {
+                currentUser.initials = nameParts[0][0] + nameParts[1][0];
+              } else {
+                currentUser.initials = data.user.username[0];
+              }
+
+              // Update UI with username
+              document.getElementById("username-display").textContent =
+                currentUser.username;
+              document.getElementById("user-initials").textContent =
+                currentUser.initials.toUpperCase();
+            } else {
+              console.error("Failed to get user info:", data.error);
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user info:", error);
+          });
+      }
 
       function createEditModal() {
         const modal = document.createElement("div");
@@ -673,8 +712,6 @@
                 border-radius: 10px; 
                 text-decoration: none;
                 font-weight: bold;
-              ">
-                List Your First Product
               </a>
             </div>
           `;
@@ -994,9 +1031,9 @@
     <div class="container">
       <div class="profile-header">
         <div class="profile-info">
-          <div class="profile-avatar">J</div>
+          <div class="profile-avatar" id="user-initials">J</div>
           <div>
-            <h2>John</h2>
+            <h2 id="username-display">Loading...</h2>
           </div>
         </div>
         <button style="width: 120px; height: 45px; border-radius: 10px">
