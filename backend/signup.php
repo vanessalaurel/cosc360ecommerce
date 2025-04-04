@@ -51,6 +51,9 @@ if ($username && $email && $password) {
         // Hash the password before storing it
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
+        // Initialize profile image path
+        $profile_image_url = null;
+
         // Handle profile image upload
         if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] == UPLOAD_ERR_OK) {
             $fileTmpPath = $_FILES['profileImage']['tmp_name'];
@@ -65,29 +68,47 @@ if ($username && $email && $password) {
             if (in_array($fileType, $allowedFileTypes) && $fileSize <= $maxFileSize) {
                 // Specify upload directory
                 $uploadFileDir = '../uploads/';
-                $dest_path = $uploadFileDir . basename($fileName);
+                
+                // Create directory if it doesn't exist
+                if (!file_exists($uploadFileDir)) {
+                    mkdir($uploadFileDir, 0777, true);
+                }
+                
+                // Generate a unique filename to prevent overwriting
+                $uniqueName = time() . '_' . basename($fileName);
+                $dest_path = $uploadFileDir . $uniqueName;
 
                 // Move the uploaded file to the designated directory
                 if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                    // Use prepared statement to insert new user data into the database
-                    $stmt = $conn->prepare("INSERT INTO users (username, email, password_hash, profile_image) VALUES (?, ?, ?)");
-                    $stmt->bind_param("sss", $username, $email, $password_hash, $dest_path); // "sss" denotes three string types
-                    
-                    if ($stmt->execute()) {
-                        // Registration successful, redirect to logIn.html
-                        header("Location: ../logIn.html");
-                        exit; // Ensure no further code is executed after redirection
-                    } else {
-                        echo "Error: " . $stmt->error;
-                    }
+                    // Store relative path in database
+                    $profile_image_url = 'uploads/' . $uniqueName;
                 } else {
                     echo "Error: Unable to move the uploaded file.";
+                    exit;
                 }
             } else {
                 echo "Error: Invalid file type or file size exceeds limit.";
+                exit;
             }
+        }
+
+        // Use prepared statement to insert new user data into the database
+        if ($profile_image_url) {
+            // Insert with profile image
+            $stmt = $conn->prepare("INSERT INTO users (username, email, password_hash, profile_image_url) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $username, $email, $password_hash, $profile_image_url); // "ssss" denotes four string types
         } else {
-            echo "Error: No file uploaded or upload error.";
+            // Insert without profile image
+            $stmt = $conn->prepare("INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $username, $email, $password_hash); // "sss" denotes three string types
+        }
+        
+        if ($stmt->execute()) {
+            // Registration successful, redirect to logIn.html
+            header("Location: ../frontend/logIn.html");
+            exit; // Ensure no further code is executed after redirection
+        } else {
+            echo "Error: " . $stmt->error;
         }
     }
 
