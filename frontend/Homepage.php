@@ -1,3 +1,26 @@
+
+<?php
+// Start the session if needed
+session_start();
+
+$servername = "localhost";
+$username = "root";
+$password = "root";
+$dbname = "productInfo_db";
+
+// Connect to the database
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check DB connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch all products
+$sql = "SELECT product_name, price, description, category, quantity, image_path FROM products";
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -110,60 +133,27 @@
       </div>
 
       <div class="products">
-        <div class="product-card">
-          <img
-            src="source/pic1.png"
-            alt="Handmade Soap"
-            class="product-image"
-          />
-          <div class="product-info">
-            <h3 class="product-title">Handmade Soap</h3>
-            <p class="product-price">
-              $260 <span class="product-old-price">$360</span>
-            </p>
-            <p class="product-rating">★★★★★ (65)</p>
-          </div>
-        </div>
-        <div class="product-card">
-          <img
-            src="source/pic1.png"
-            alt="Handmade Soap"
-            class="product-image"
-          />
-          <div class="product-info">
-            <h3 class="product-title">Handmade Soap</h3>
-            <p class="product-price">
-              $960 <span class="product-old-price">$1160</span>
-            </p>
-            <p class="product-rating">★★★★★ (65)</p>
-          </div>
-        </div>
-        <div class="product-card">
-          <img
-            src="source/pic1.png"
-            alt="Handmade Soap"
-            class="product-image"
-          />
-          <div class="product-info">
-            <h3 class="product-title">Handmade Soap</h3>
-            <p class="product-price">
-              $160 <span class="product-old-price">$170</span>
-            </p>
-            <p class="product-rating">★★★★☆ (65)</p>
-          </div>
-        </div>
-        <div class="product-card">
-          <img
-            src="source/pic1.png"
-            alt="Handmade Soap"
-            class="product-image"
-          />
-          <div class="product-info">
-            <h3 class="product-title">Handmade Soap</h3>
-            <p class="product-price">$360</p>
-            <p class="product-rating">★★★★★ (65)</p>
-          </div>
-        </div>
+      <?php if ($result->num_rows > 0): ?>
+          <?php while ($row = $result->fetch_assoc()): ?>
+            <div class="product-card">
+              <div class="product-image">
+                <img src="<?php echo htmlspecialchars($row['image_path']); ?>" alt="<?php echo htmlspecialchars($row['product_name']); ?>" class="product-image-img" />
+                <div class="add-to-cart">Add to Cart</div>
+              </div>
+              <div class="product-info">
+                <h3 class="product-title"><?php echo htmlspecialchars($row['product_name']); ?></h3>
+                <p class="product-price">
+                  $<?php echo number_format($row['price'], 2); ?>
+                </p>
+                <p class="product-description"><?php echo htmlspecialchars($row['description']); ?></p>
+                <p class="product-category"><?php echo htmlspecialchars($row['category']); ?></p>
+                <p class="product-quantity"><?php echo "Quantity: " . $row['quantity']; ?></p>
+              </div>
+            </div>
+          <?php endwhile; ?>
+        <?php else: ?>
+          <p style="margin-left: 70px; font-size: 18px; color: #444;">No products available in the store.</p>
+        <?php endif; ?>
       </div>
     </section>
 
