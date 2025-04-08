@@ -71,6 +71,26 @@
         text-align: center;
         flex: 1;
       }
+      .profile-actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .logout-btn {
+        background-color: #f44336;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+      }
+
+      .logout-btn:hover {
+        background-color: #d32f2f;
+      }
       .dropdown {
         margin-top: 40px;
       }
@@ -1036,9 +1056,12 @@
             <h2 id="username-display">Loading...</h2>
           </div>
         </div>
-        <button style="width: 120px; height: 45px; border-radius: 10px">
-          Contact Seller
-        </button>
+        <div class="profile-actions">
+          <a href="../backend/logout.php" class="logout-btn">Log Out</a>
+          <button style="width: 120px; height: 45px; border-radius: 10px">
+            Contact Seller
+          </button>
+        </div>
       </div>
       <div class="stats">
         <div class="stat-box">

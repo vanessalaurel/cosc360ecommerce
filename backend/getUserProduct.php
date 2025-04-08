@@ -5,6 +5,9 @@ session_start();
 // Set header to return JSON
 header('Content-Type: application/json');
 
+// Debug: Output session data
+error_log("Session data: " . print_r($_SESSION, true));
+
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['error' => 'User not logged in']);
@@ -14,7 +17,7 @@ if (!isset($_SESSION['user_id'])) {
 // Database connection
 $servername = "localhost";
 $username = "root";
-$password = "root"; // Changed from empty string to "root" to match your other files
+$password = "root"; 
 $dbname = "productInfo_db";
 
 // Create connection
@@ -29,11 +32,17 @@ if ($conn->connect_error) {
 // Get user ID from session
 $user_id = $_SESSION['user_id'];
 
+// Debug: Log user ID
+error_log("Fetching products for user_id: " . $user_id);
+
 // Fetch user's products from database
 $stmt = $conn->prepare("SELECT * FROM products WHERE user_id = ? ORDER BY date_listed DESC");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Debug: Log query results
+error_log("Query returned " . $result->num_rows . " products");
 
 // Store products in an array
 $products = [];
