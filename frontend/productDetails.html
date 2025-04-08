@@ -1,17 +1,291 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Artzy - Detalls del Producte</title>
+    <title>Artzy - Product Details</title>
     <link rel="stylesheet" href="productDetails.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
       rel="stylesheet"
     />
+    <style>
+      /* Add any missing styles here */
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .logo img {
+        height: 40px;
+      }
+      nav {
+        display: flex;
+        gap: 20px;
+      }
+      nav a {
+        text-decoration: none;
+        color: #333;
+      }
+      .search-cart {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .search-cart input {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .search-cart button {
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      .firstLine {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        align-items: center;
+      }
+      .firstLine nav {
+        display: flex;
+        gap: 10px;
+      }
+      .firstLine nav a {
+        text-decoration: none;
+        color: #777;
+      }
+      .firstLine nav a:not(:last-child)::after {
+        content: ">";
+        margin-left: 10px;
+        color: #999;
+      }
+      .sell {
+        color: #e06c54;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .container {
+        display: flex;
+        padding: 20px;
+        gap: 20px;
+      }
+      .small-images {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 120px;
+      }
+      .small-images img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .large-image {
+        flex: 2;
+      }
+      .large-image img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      .text-content {
+        flex: 1;
+        padding: 0 20px;
+      }
+      .text-content h2 {
+        margin-top: 0;
+        color: #333;
+      }
+      .quantity-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .quantity-container button {
+        width: 40px;
+        height: 40px;
+        background: #f5f5f5;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .quantity-container input {
+        width: 60px;
+        height: 40px;
+        text-align: center;
+        border: 1px solid #ddd;
+        margin: 0 10px;
+      }
+      .btn {
+        background-color: #e06c54;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .bottom-section {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+      }
+      .grid-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+      .review-form {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      .review-inputs {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .upload-box {
+        width: 100px;
+        height: 100px;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 5px;
+        position: relative;
+      }
+      .upload-box span {
+        font-size: 30px;
+        color: #777;
+      }
+      .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+        display: none;
+      }
+      .textReview {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .rating-select {
+        margin-bottom: 15px;
+      }
+      .rating-select select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+      .columna-dreta .producte {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+      }
+      .columna-dreta .producte img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+      .columna-dreta .producte h3 {
+        margin: 10px 0 5px;
+      }
+      .columna-dreta .producte .preu {
+        margin: 0;
+        color: #e06c54;
+      }
+      .reviews {
+        padding: 20px;
+      }
+      .user {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 10px;
+      }
+      .user img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .user .description h4 {
+        margin: 0 0 5px;
+      }
+      .user .description p {
+        margin: 5px 0;
+      }
+      .user .description small {
+        color: #777;
+      }
+      footer {
+        background: #000;
+        color: white;
+        padding: 40px 20px;
+      }
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 30px;
+      }
+      .footer-content > div {
+        flex: 1;
+        min-width: 200px;
+      }
+      .footer-content h3 {
+        margin-top: 0;
+      }
+      .footer-content p {
+        margin: 5px 0;
+      }
+      .footer-content input {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        margin-top: 10px;
+      }
+      .copyright {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #333;
+      }
+      .rating {
+        display: flex;
+        align-items: center;
+        margin: 5px 0;
+        color: #f9a825;
+      }
+    </style>
     <script>
+      // Global variables to store product details
+      let productDetails = null;
+
       document.addEventListener("DOMContentLoaded", function () {
+        // Setup quantity control buttons
         const minusBtn = document.querySelector(
           ".quantity-container button:first-child"
         );
@@ -36,108 +310,249 @@
           }
         });
 
+        // Setup image preview for reviews
         const reviewImageInput = document.querySelector(
           'input[name="review_image"]'
         );
-        const previewImage = document.createElement("img");
-        previewImage.className = "preview-image";
-        const uploadBox = document.querySelector(".upload-box");
-        const fileInput = document.createElement("input");
-        fileInput.type = "file";
-        fileInput.accept = "image/*";
-        uploadBox.appendChild(previewImage);
+        if (reviewImageInput) {
+          const previewImage = document.createElement("img");
+          previewImage.className = "preview-image";
+          const uploadBox = document.querySelector(".upload-box");
+          if (uploadBox) {
+            uploadBox.appendChild(previewImage);
 
-        // Handle file selection
-        reviewImageInput.addEventListener("change", function () {
-          if (this.files && this.files[0]) {
-            const reader = new FileReader();
+            // Handle file selection
+            reviewImageInput.addEventListener("change", function () {
+              if (this.files && this.files[0]) {
+                const reader = new FileReader();
 
-            reader.onload = function (e) {
-              previewImage.src = e.target.result;
-              previewImage.style.display = "block";
-              uploadBoxPlus.style.display = "none";
-            };
+                reader.onload = function (e) {
+                  previewImage.src = e.target.result;
+                  previewImage.style.display = "block";
+                  uploadBox.querySelector("span").style.display = "none";
+                };
 
-            reader.readAsDataURL(this.files[0]);
-          } else {
-            previewImage.style.display = "none";
-            uploadBoxPlus.style.display = "block";
+                reader.readAsDataURL(this.files[0]);
+              } else {
+                previewImage.style.display = "none";
+                uploadBox.querySelector("span").style.display = "block";
+              }
+            });
           }
-        });
+        }
 
         // Get the product ID from the URL
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get("id") || 1; // Default to 1 if not specified
+        const productId = urlParams.get("id") || 1;
 
-        // Track the last review ID to fetch only new ones
-        let lastFeedbackId = 0;
+        if (!productId) {
+          displayError("No product ID specified");
+          return;
+        }
 
-        // Initial load of reviews
-        loadReviews();
-
-        // Set up periodic refresh for new reviews
-        setInterval(loadReviews, 5000); // Check for new reviews every 5 seconds
+        // Load product details
+        loadProductDetails(productId);
 
         // Set up review form submission
         const reviewForm = document.getElementById("review-form");
         if (reviewForm) {
           reviewForm.addEventListener("submit", function (e) {
             e.preventDefault();
-            submitReview();
+            submitReview(productId);
           });
         }
 
-        // Function to load reviews using AJAX
-        function loadReviews() {
-          fetch(`../backend/reviews.php?last_feedback_id=${lastFeedbackId}`)
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.error) {
-                console.error("Error loading reviews:", data.error);
-                return;
-              }
+        // Load reviews for this product
+        loadReviews();
+      });
 
-              if (data.reviews && data.reviews.length > 0) {
-                // Update the last feedback ID for the next check
-                lastFeedbackId = Math.max(
-                  ...data.reviews.map((review) => review.feedback_id)
-                );
+      function loadProductDetails(productId) {
+        // Update page title to show loading
+        document.title = "Loading Product Details...";
 
-                // Add new reviews to the page
-                appendReviews(data.reviews);
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching reviews:", error);
-            });
+        // Show loading state in product name and details
+        document.querySelector(".text-content h2").textContent = "Loading...";
+        document.querySelector(".text-content p:nth-of-type(1)").textContent =
+          "$...";
+        document.querySelector(".text-content p:nth-of-type(2)").textContent =
+          "Loading product description...";
+
+        fetch(`../backend/getProductDetails.php?product_id=${productId}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (!data.success) {
+              throw new Error(data.error || "Failed to load product details");
+            }
+
+            // Store product details globally
+            productDetails = data.product;
+
+            // Update the page title
+            document.title = `Artzy - ${productDetails.product_name}`;
+
+            // Update product information
+            updateProductUI(productDetails);
+
+            // Update breadcrumb navigation
+            updateBreadcrumbs(productDetails);
+
+            // Update product breadcrumbs
+            const breadcrumbs = document.querySelector(".firstLine nav");
+            if (breadcrumbs) {
+              breadcrumbs.innerHTML = `
+                <a href="index.html">Home</a>
+                <a href="#">${productDetails.category}</a>
+                <a href="#">${productDetails.product_name}</a>
+              `;
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading product details:", error);
+            displayError(`Error loading product details: ${error.message}`);
+          });
+      }
+
+      function updateProductUI(product) {
+        // Update main product image
+        const mainImage = document.querySelector(".large-image img");
+        if (mainImage) {
+          mainImage.src = product.image_path || "fang.jpeg";
+          mainImage.alt = product.product_name;
         }
 
-        // Function to append new reviews to the page
-        function appendReviews(reviews) {
-          const reviewsContainer = document.querySelector(".reviews");
+        // Update product info
+        const productTitle = document.querySelector(".text-content h2");
+        if (productTitle) {
+          productTitle.textContent = product.product_name;
+        }
 
-          reviews.forEach((review) => {
-            // Check if this review is already displayed
-            const existingReview = document.querySelector(
-              `.review-item-${review.feedback_id}`
-            );
-            if (existingReview) return;
+        const productPrice = document.querySelector(
+          ".text-content p:nth-of-type(1)"
+        );
+        if (productPrice) {
+          productPrice.textContent = `$${parseFloat(product.price).toFixed(2)}`;
+        }
 
-            // Create new review element
-            const reviewElement = document.createElement("div");
-            reviewElement.className = `user review-item-${review.feedback_id}`;
+        const productDescription = document.querySelector(
+          ".text-content p:nth-of-type(2)"
+        );
+        if (productDescription) {
+          productDescription.textContent =
+            product.description || "No description available.";
+        }
 
-            // Format the date
-            const reviewDate = new Date(review.feedback_date);
-            const formattedDate =
-              reviewDate.toLocaleDateString() +
-              " " +
-              reviewDate.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
+        // Update max quantity based on available stock
+        const quantityInput = document.querySelector(
+          ".quantity-container input"
+        );
+        if (quantityInput && product.quantity) {
+          quantityInput.max = product.quantity;
 
-            reviewElement.innerHTML = `
+          // If current value is more than available, reset to max
+          if (parseInt(quantityInput.value) > product.quantity) {
+            quantityInput.value = product.quantity;
+          }
+        }
+      }
+
+      function updateBreadcrumbs(product) {
+        // Update breadcrumb navigation
+        const breadcrumbs = document.querySelector(".firstLine nav");
+        if (breadcrumbs) {
+          breadcrumbs.innerHTML = `
+            <a href="index.html">Home</a>
+            <a href="#">${product.category || "Products"}</a>
+            <a href="#">${product.product_name}</a>
+          `;
+        }
+      }
+
+      function displayError(message) {
+        const errorMessage = document.createElement("div");
+        errorMessage.className = "error-message";
+        errorMessage.style.color = "red";
+        errorMessage.style.padding = "20px";
+        errorMessage.style.textAlign = "center";
+        errorMessage.style.backgroundColor = "#ffeeee";
+        errorMessage.style.borderRadius = "5px";
+        errorMessage.style.margin = "20px";
+        errorMessage.textContent = message;
+
+        // Insert at the top of the container
+        const container = document.querySelector(".container");
+        if (container) {
+          container.insertBefore(errorMessage, container.firstChild);
+        } else {
+          document.body.insertBefore(errorMessage, document.body.firstChild);
+        }
+      }
+
+      // Function to load reviews - updated with debugging
+      function loadReviews() {
+        console.log("Loading reviews...");
+
+        // Get the product ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get("id") || 1; // Default to 1 if not specified
+
+        const lastFeedbackId = 0; // Get reviews from the beginning
+        const url = `../backend/reviews.php?product_id=${productId}&last_feedback_id=${lastFeedbackId}`;
+
+        console.log("Fetching reviews from:", url);
+
+        fetch(url)
+          .then((response) => {
+            console.log("Response status:", response.status);
+            return response.text();
+          })
+          .then((text) => {
+            console.log("Raw response:", text);
+            try {
+              return JSON.parse(text);
+            } catch (e) {
+              console.error("Error parsing JSON:", e);
+              throw new Error("Invalid JSON response");
+            }
+          })
+          .then((data) => {
+            console.log("Parsed data:", data);
+
+            if (data.error) {
+              console.error("Error from server:", data.error);
+              return;
+            }
+
+            if (data.reviews && data.reviews.length > 0) {
+              console.log("Got reviews:", data.reviews.length);
+              // Display reviews
+              const reviewsContainer = document.querySelector(".reviews");
+
+              // Clear existing content except the header
+              const header = reviewsContainer.querySelector("h2");
+              reviewsContainer.innerHTML = "";
+              reviewsContainer.appendChild(header);
+
+              data.reviews.forEach((review) => {
+                console.log("Adding review:", review.feedback_id);
+                const reviewElement = document.createElement("div");
+                reviewElement.className = `user review-item-${review.feedback_id}`;
+
+                // Format the date
+                const reviewDate = new Date(review.feedback_date);
+                const formattedDate =
+                  reviewDate.toLocaleDateString() +
+                  " " +
+                  reviewDate.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  });
+
+                reviewElement.innerHTML = `
                         <img src="qr.jpeg" alt="Foto de perfil">
                         <div class="description">
                             <h4>${review.username}</h4>
@@ -147,77 +562,114 @@
                         </div>
                     `;
 
-            // Insert at the beginning for newest first
-            const firstReview = reviewsContainer.querySelector(".user");
-            if (firstReview) {
-              reviewsContainer.insertBefore(reviewElement, firstReview);
+                reviewsContainer.appendChild(reviewElement);
+              });
             } else {
-              reviewsContainer.appendChild(reviewElement);
+              console.log("No reviews found");
+              // No reviews
+              const reviewsContainer = document.querySelector(".reviews");
+              reviewsContainer.innerHTML = `
+                    <h2 style="padding-left: 20px">Reviews</h2>
+                    <p style="padding: 20px; font-style: italic; color: #777;">No reviews yet. Be the first to review this product!</p>
+                `;
             }
-          });
-        }
-
-        // Function to submit a new review
-        function submitReview() {
-          const reviewText = document.querySelector(
-            'input[name="review_text"]'
-          ).value;
-          const ratingValue =
-            document.querySelector('select[name="rating"]')?.value || 5;
-
-          if (!reviewText.trim()) {
-            alert("Please enter a review comment");
-            return;
-          }
-
-          // Create form data object
-          const formData = new FormData();
-          formData.append("review_text", reviewText);
-          formData.append("rating", ratingValue);
-
-          // Handle file upload if present
-          const fileInput = document.querySelector(
-            'input[name="review_image"]'
-          );
-          if (fileInput && fileInput.files[0]) {
-            formData.append("review_image", fileInput.files[0]);
-          }
-
-          // Submit using fetch
-          fetch("../backend/fetchReview.php", {
-            method: "POST",
-            body: formData,
           })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.error) {
-                alert(data.error);
-                return;
-              }
+          .catch((error) => {
+            console.error("Error fetching reviews:", error);
+          });
+      }
 
-              if (data.success) {
-                // Clear the form
-                document.querySelector('input[name="review_text"]').value = "";
-                if (fileInput) fileInput.value = "";
+      function displayReviews(reviews) {
+        const reviewsContainer = document.querySelector(".reviews");
+        if (!reviewsContainer) return;
 
-                // If we got the new review back, add it to the page
-                if (data.review) {
-                  appendReviews([data.review]);
-                  lastFeedbackId = Math.max(
-                    lastFeedbackId,
-                    data.review.feedback_id
-                  );
-                }
+        // Clear existing reviews except the header
+        const header = reviewsContainer.querySelector("h2");
+        reviewsContainer.innerHTML = "";
+        reviewsContainer.appendChild(header);
 
-                alert("Review submitted successfully!");
-              }
-            })
-            .catch((error) => {
-              console.error("Error submitting review:", error);
-              alert("An error occurred while submitting your review");
+        reviews.forEach((review) => {
+          const reviewElement = document.createElement("div");
+          reviewElement.className = "user";
+
+          // Format the date
+          const reviewDate = new Date(review.feedback_date);
+          const formattedDate =
+            reviewDate.toLocaleDateString() +
+            " " +
+            reviewDate.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
             });
+
+          reviewElement.innerHTML = `
+            <img src="${review.user_avatar || "qr.jpeg"}" alt="User profile">
+            <div class="description">
+              <h4>${review.username || "Anonymous"}</h4>
+              <div class="rating">Rating: ${review.rating}/5</div>
+              <p>${review.comment}</p>
+              <small>${formattedDate}</small>
+            </div>
+          `;
+
+          reviewsContainer.appendChild(reviewElement);
+        });
+      }
+
+      // Function to submit review
+      function submitReview(productId) {
+        const reviewText = document.querySelector(
+          'input[name="review_text"]'
+        ).value;
+        const ratingValue = document.querySelector(
+          'select[name="rating"]'
+        ).value;
+
+        if (!reviewText.trim()) {
+          alert("Please enter a review comment");
+          return;
         }
-      });
+
+        // Create form data
+        const formData = new FormData();
+        formData.append("review_text", reviewText);
+        formData.append("rating", ratingValue);
+        formData.append("product_id", productId);
+
+        // Handle file upload if present
+        const fileInput = document.querySelector('input[name="review_image"]');
+        if (fileInput && fileInput.files[0]) {
+          formData.append("review_image", fileInput.files[0]);
+        }
+
+        // Submit review
+        fetch("../backend/fetchReview.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              alert(data.error);
+              return;
+            }
+
+            if (data.success) {
+              // Clear form
+              document.querySelector('input[name="review_text"]').value = "";
+              if (fileInput) fileInput.value = "";
+
+              // Reload reviews to show the latest
+              loadReviews();
+
+              alert("Review submitted successfully!");
+            }
+          })
+          .catch((error) => {
+            console.error("Error submitting review:", error);
+            alert("An error occurred while submitting your review");
+          });
+      }
     </script>
   </head>
   <body>
@@ -246,8 +698,8 @@
       <div>
         <nav>
           <a href="#">Home</a>
-          <a href="#">Pottery</a>
-          <a href="#">Pottery Real Handmade 01</a>
+          <a href="#">Loading...</a>
+          <a href="#">Loading...</a>
         </nav>
       </div>
       <div class="sell">Sell</div>
@@ -265,13 +717,9 @@
         <img src="fang.jpeg" alt="Large Image" />
       </div>
       <div class="column text-content">
-        <h2>Pottery real Handmade 01</h2>
-        <p style="font-size: 24px">$192.00</p>
-        <p>
-          This is the text content. You can add more paragraphs, descriptions,
-          or any other information here. This is the text content. You can add
-          more paragraphs, descriptions, or any other information here.
-        </p>
+        <h2>Loading Product...</h2>
+        <p style="font-size: 24px">$0.00</p>
+        <p>Loading product description...</p>
         <hr />
         <div class="bottom-section">
           <div class="quantity-container">
@@ -332,15 +780,16 @@
       </div>
 
       <div class="columna columna-dreta">
+        <h3>Related Products</h3>
         <div class="producte">
-          <img src="qr.jpeg" alt="Imatge del producte" />
-          <h3>Product Name</h3>
-          <p class="preu"><u>19.99€</u></p>
+          <img src="qr.jpeg" alt="Product image" />
+          <h3>Similar Product</h3>
+          <p class="preu"><u>$19.99</u></p>
         </div>
         <div class="producte">
-          <img src="qr.jpeg" alt="Imatge del producte" />
-          <h3>Product Name</h3>
-          <p class="preu"><u>19.99€</u></p>
+          <img src="qr.jpeg" alt="Product image" />
+          <h3>Similar Product</h3>
+          <p class="preu"><u>$19.99</u></p>
         </div>
       </div>
     </div>
@@ -348,10 +797,10 @@
     <div class="reviews">
       <h2 style="padding-left: 20px">Reviews</h2>
       <div class="user">
-        <img src="qr.jpeg" alt="Foto de perfil" />
+        <img src="qr.jpeg" alt="User profile" />
         <div class="description">
-          <h4>User 01</h4>
-          <p>Really good product, it's very usefull.</p>
+          <h4>Loading reviews...</h4>
+          <p>Please wait while we load product reviews.</p>
         </div>
       </div>
     </div>

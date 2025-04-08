@@ -120,6 +120,7 @@
         height: 200px;
         border-radius: 5px;
         overflow: hidden;
+        cursor: pointer; /* Add cursor pointer to indicate it's clickable */
       }
       .product-image img {
         width: 100%;
@@ -732,7 +733,7 @@
                 border-radius: 10px; 
                 text-decoration: none;
                 font-weight: bold;
-              </a>
+              ">+ Add New Product</a>
             </div>
           `;
           return;
@@ -745,7 +746,9 @@
           productCard.dataset.productId = product.product_id;
 
           productCard.innerHTML = `
-            <div class="product-image">
+            <div class="product-image" onclick="viewProductDetails(${
+              product.product_id
+            })">
               <img
                 src="${product.image_path}"
                 alt="${product.product_name}"
@@ -754,7 +757,7 @@
               />
               <div class="edit-product" onclick="openEditModal(${
                 product.product_id
-              })">Edit Product</div>
+              }); event.stopPropagation();">Edit Product</div>
             </div>
             <div class="product-info">
               <h3 class="product-title">${product.product_name}</h3>
@@ -771,6 +774,11 @@
 
         // Initialize pagination
         showPage(1);
+      }
+
+      // Function to navigate to product details page
+      function viewProductDetails(productId) {
+        window.location.href = `productDetails.html?id=${productId}`;
       }
 
       function openEditModal(productId) {
