@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 
 session_start(); // Start a session to access user information
 
-// Check if user is logged in (you'll need to implement proper session handling in your login system)
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     // Redirect to login page if not logged in
     header("Location: ../frontend/login.html");

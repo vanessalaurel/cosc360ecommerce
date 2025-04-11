@@ -3,7 +3,7 @@
 // Start a session to manage user login state
 session_start();
 
-// If the user is already logged in, redirect them to myproduct.html
+// If the user is already logged in, redirect them to Homepage.php
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     header("Location: ../frontend/Homepage.php");
     exit;
@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
-// Database connection (replace with your actual credentials)
+// Database connection
 $servername = "localhost";
 $username = "root";
 $password = "root";

@@ -553,7 +553,6 @@
                   });
 
                 reviewElement.innerHTML = `
-                        <img src="qr.jpeg" alt="Foto de perfil">
                         <div class="description">
                             <h4>${review.username}</h4>
                             <div class="rating">Rating: ${review.rating}/5</div>
@@ -603,7 +602,7 @@
             });
 
           reviewElement.innerHTML = `
-            <img src="${review.user_avatar || "qr.jpeg"}" alt="User profile">
+            <img src="${review.user_avatar}" alt="User profile">
             <div class="description">
               <h4>${review.username || "Anonymous"}</h4>
               <div class="rating">Rating: ${review.rating}/5</div>
@@ -676,18 +675,12 @@
     <header>
       <div class="logo"><img src="Exclusive.png" alt="Logo" /></div>
       <nav>
-        <a href="#">Home</a>
-        <a href="#">Contact</a>
-        <a href="#">About</a>
-        <a href="#">Sign Up</a>
-        <a href="#">Sell</a>
+        <a href="Homepage.php">Home</a>
+        <a href="signUp.html">Sign Up</a>
       </nav>
       <div class="search-cart">
         <input type="text" placeholder="What are you looking for?" />
         <button><img src="Vector.png" alt="" /></button>
-        <button>
-          <img src="Frame 551.png" style="position: relative; top: 7px" />
-        </button>
         <button>
           <img src="user.png" style="position: relative; top: 7px" />
         </button>
@@ -706,13 +699,6 @@
     </main>
 
     <div class="container">
-      <div class="column small-images">
-        <img src="qr.jpeg" alt="Image 1" />
-        <img src="qr.jpeg" alt="Image 2" />
-        <img src="qr.jpeg" alt="Image 3" />
-        <img src="qr.jpeg" alt="Image 4" />
-        <img src="qr.jpeg" alt="Image 5" />
-      </div>
       <div class="column large-image">
         <img src="fang.jpeg" alt="Large Image" />
       </div>
@@ -782,12 +768,10 @@
       <div class="columna columna-dreta">
         <h3>Related Products</h3>
         <div class="producte">
-          <img src="qr.jpeg" alt="Product image" />
           <h3>Similar Product</h3>
           <p class="preu"><u>$19.99</u></p>
         </div>
         <div class="producte">
-          <img src="qr.jpeg" alt="Product image" />
           <h3>Similar Product</h3>
           <p class="preu"><u>$19.99</u></p>
         </div>
@@ -797,7 +781,6 @@
     <div class="reviews">
       <h2 style="padding-left: 20px">Reviews</h2>
       <div class="user">
-        <img src="qr.jpeg" alt="User profile" />
         <div class="description">
           <h4>Loading reviews...</h4>
           <p>Please wait while we load product reviews.</p>

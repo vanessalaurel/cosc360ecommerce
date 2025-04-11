@@ -6,7 +6,7 @@ session_start();
 // Database connection
 $servername = "localhost";
 $username = "root";
-$password = "root"; // MAMP default
+$password = "root";
 $dbname = "productInfo_db";
 
 // Create connection

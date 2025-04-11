@@ -95,20 +95,12 @@ if ($result && $result->num_rows > 0) {
     <header>
       <div class="logo"><img src="Source/Exclusive.png" alt="Logo" /></div>
       <nav>
-        <a href="#">Home</a>
-        <a href="#">Contact</a>
-        <a href="#">About</a>
-        <a href="#" class="active">Sign Up</a>
+        <a href="Homepage.php">Home</a>
+        <a href="signUp.html" class="active">Sign Up</a>
       </nav>
       <div class="search-cart">
         <input type="text" placeholder="What are you looking for?" />
         <button><img src="Source/Vector.png" alt="" /></button>
-        <button>
-          <img
-            src="Source/Frame 551.png"
-            style="position: relative; top: 7px"
-          />
-        </button>
         <a href="Profilepage.html">
           <button>
             <img src="Source/user.png" style="position: relative; top: 7px" />
@@ -281,7 +273,6 @@ if ($result && $result->num_rows > 0) {
               class="product-image-img"
               onerror="this.onerror=null; this.src='source/default-product.png'; console.log('Image failed to load');"
             />
-            <div class="add-to-cart" onclick="addToCart(3, event)">Add to Cart</div>
           </div>
           <div class="product-info">
             <h3 class="product-title">Handmade Soap</h3>
